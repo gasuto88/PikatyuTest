@@ -18,41 +18,8 @@ public class Player : MonoBehaviour
 {
 	#region フィールド変数
 
-	[SerializeField,Header("名前")]
-	private string _playerName = "ゼロ";
-
-	[SerializeField, Header("HP"), Min(0f)]
-	private float _playerHp = 10f;
-
-	[SerializeField,Header("防御"), Min(0f)]
-	private float _defense = 5f;
-
-	[SerializeField, Header("移動速度"), Min(0f)]
-	private float _moveSpeed = 1f;
-
-	[SerializeField,Header("回転速度"),Min(0f)]
-	private float _rotationSpeed = 0f;
-
-	[SerializeField, Header("発射威力"), Min(0f)]
-	private float _shotPower = 1f;
-
-	[SerializeField, Header("ホールド判定距離"), Min(0f)]
-	private float _holdDistance = 1f;
-
-	[SerializeField, Header("通常攻撃距離"), Min(0f)]
-	private float _normalAttackDistance = 2f;
-
-	[SerializeField, Header("攻撃時間"), Min(0f)]
-	private float _attackTime = 1f;
-
-	[SerializeField, Header("ロール攻撃時間"), Min(0f)]
-	private float _roleAttackTime = 1f;
-
-	[SerializeField,Header("ロール攻撃クールタイム")]
-	private float _roleAttackCoolTime = 5f;
-
-	[SerializeField,Header("バーストの半径")]
-	private float _burstRadius = 1f;
+	[SerializeField,Header("プレイヤーデータ")]
+	private PlayerDataAsset _playerDataAsset = default;
 
 	// プレイヤー座標
 	private Vector3 _playerPosition = default;
@@ -60,10 +27,10 @@ public class Player : MonoBehaviour
 	// 自身のTransform
 	private Transform _myTransform = default;
 
+	private Move _move = default;
+
 	// プレイヤー入力クラス
 	private UserInput _playerInput = default;
-
-
 
     #endregion
 
@@ -80,6 +47,7 @@ public class Player : MonoBehaviour
 
 		// Script取得
 		_playerInput = GetComponent<UserInput>();
+		_move = GetComponent<Move>();
 	}
 
 	/// <summary>
@@ -102,7 +70,7 @@ public class Player : MonoBehaviour
         }
 
 		// 移動の入力を取得
-		Vector2 moveInput = _playerInput.Move();
+		Vector2 moveInput = _playerInput.MoveInput;
 
 		// 無入力だったら
 		if(moveInput == Vector2.zero)
@@ -113,33 +81,21 @@ public class Player : MonoBehaviour
 		// 移動方向を計算
 		Vector3 moveDerection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
 
-		RotateMoveDirection(moveDerection);
+		//_move.RotateMoveDirection(moveDerection);
 
-		Move(moveDerection);
+		//_move.CalculationMove(moveDerection);
 
 		// 移動を設定
 		_myTransform.position = _playerPosition;
     }
 
-	/// <summary>
-	/// 移動方向に回転する処理
-	/// </summary>
-	/// <param name="moveDirection">移動方向</param>
-	private void RotateMoveDirection(Vector3 moveDirection)
-	{
-		// 移動方向まで回転
-		Quaternion playerRotate = Quaternion.LookRotation(moveDirection,Vector3.up);
-
-		// 回転を設定
-		_myTransform.rotation = Quaternion.Slerp(_myTransform.rotation,playerRotate,_rotationSpeed * Time.deltaTime);
-	}
+	
 
 	/// <summary>
-	/// 移動処理
+	/// 通常攻撃
 	/// </summary>
-	/// <param name="moveDirection">移動方向</param>
-	private void Move(Vector3 moveDirection)
+	private void NormalAttack()
     {
-		_playerPosition += moveDirection * _moveSpeed * Time.deltaTime;
+
     }
 }

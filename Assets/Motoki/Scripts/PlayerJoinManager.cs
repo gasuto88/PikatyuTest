@@ -56,6 +56,7 @@ public class PlayerJoinManager : MonoBehaviour
     /// </summary>
     private void OnJoin(InputAction.CallbackContext context)
     {
+        Debug.Log("入室");
         // プレイヤー数が最大数に達していたら、処理を終了
         if (_currentPlayerCount >= _maxPlayerCount)
         {

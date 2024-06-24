@@ -235,18 +235,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0468ae593dd56d4caa627bed100ee96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerName: "\u30BC\u30ED"
-  _playerHp: 10
-  _defense: 5
-  _moveSpeed: 10
-  _rotationSpeed: 8
-  _shotPower: 1
-  _holdDistance: 1
-  _normalAttackDistance: 2
-  _attackTime: 1
-  _roleAttackTime: 1
-  _roleAttackCoolTime: 5
-  _burstRadius: 1
+  _playerDataAsset: {fileID: 11400000, guid: dc6a74d1801b8ea488f90f492e8f78ba, type: 2}
 --- !u!114 &6247913390309898024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +249,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _userInputDataAsset: {fileID: 11400000, guid: d6c39400014733a4fa940e266457ed72, type: 2}
-  _moveActionName: Move
 --- !u!114 &4709912009175005260
 MonoBehaviour:
   m_ObjectHideFlags: 0

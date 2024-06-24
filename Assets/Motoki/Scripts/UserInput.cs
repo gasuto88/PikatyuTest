@@ -23,7 +23,6 @@ public class UserInput : MonoBehaviour
     [SerializeField, Header("ユーザー入力データ")]
     private UserInputDataAsset _userInputDataAsset = default;
 
-    // 移動入力
     private Vector2 _moveInput = default;
 
     // 通常攻撃判定
@@ -43,6 +42,25 @@ public class UserInput : MonoBehaviour
     #endregion
 
     #region プロパティ
+
+    public Vector2 MoveInput
+    {
+        get
+        {
+            // 入力デッドゾーン
+            if (-_userInputDataAsset.InputDeadZoon <= _moveInput.x
+                && _moveInput.x <= _userInputDataAsset.InputDeadZoon)
+            {
+                _moveInput.x = 0f;
+            }
+            if (-_userInputDataAsset.InputDeadZoon <= _moveInput.y
+                && _moveInput.y <= _userInputDataAsset.InputDeadZoon)
+            {
+                _moveInput.y = 0f;
+            }
+            return _moveInput;
+        }
+    }
 
     /// <summary>
     /// 攻撃判定
@@ -71,7 +89,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    public bool HideTrigger
+    public bool IsHideTrigger
     {
         get
         {
@@ -126,14 +144,18 @@ public class UserInput : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// 通常攻撃の入力が離された時に呼ばれる処理
     /// </summary>
-    /// <param name="context"></param>
+    /// <param name="context">入力情報</param>
     private void OnNormalAttackUp(InputAction.CallbackContext context)
     {
         _isNormalAttack = false;
     }
 
+    /// <summary>
+    /// ロール攻撃の入力が押された時に呼ばれる処理
+    /// </summary>
+    /// <param name="context">入力情報</param>
     private void OnRoleAttackDown(InputAction.CallbackContext context)
     {
         _isRoleAttack = context.ReadValueAsButton();
@@ -144,45 +166,39 @@ public class UserInput : MonoBehaviour
         _isRoleAttack = false;
     }
 
+    /// <summary>
+    /// 蘇生の入力が押された時に呼ばれる処理
+    /// </summary>
+    /// <param name="context">入力情報</param>
     private void OnResurrectionDown(InputAction.CallbackContext context)
     {
         _isResurrection = context.ReadValueAsButton();
     }
 
+    /// <summary>
+    /// 蘇生の入力が離された時に呼ばれる処理
+    /// </summary>
+    /// <param name="context">入力情報</param>
     private void OnResurrectionUp(InputAction.CallbackContext context)
     {
         _isResurrection = false;
     }
 
+    /// <summary>
+    /// 掴み/投げの入力が押された時に呼ばれる処理
+    /// </summary>
+    /// <param name="context">入力情報</param>
     private void OnHoldTriggerDown(InputAction.CallbackContext context)
     {
         _isHoldTrigger = context.ReadValueAsButton();
     }
 
+    /// <summary>
+    /// 掴み/投げの入力が離された時に呼ばれる処理
+    /// </summary>
+    /// <param name="context">入力情報</param>
     private void OnHoldTriggerUp(InputAction.CallbackContext context)
     {
         _isHoldTrigger = false;
     }
-
-    /// <summary>
-    /// 移動入力処理
-    /// </summary>
-    /// <returns></returns>
-    public Vector2 Move()
-    {
-        // 入力デッドゾーン
-        if (-_userInputDataAsset.InputDeadZoon <= _moveInput.x
-            && _moveInput.x <= _userInputDataAsset.InputDeadZoon)
-        {
-            _moveInput.x = 0f;
-        }
-        if (-_userInputDataAsset.InputDeadZoon <= _moveInput.y
-            && _moveInput.y <= _userInputDataAsset.InputDeadZoon)
-        {
-            _moveInput.y = 0f;
-        }
-        return _moveInput;
-    }
-
-
 }
