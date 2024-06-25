@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* #SCRIPTNAME#.cs
+* BallMove.cs
 * 
 * 作成日　2024/06/25
 *
@@ -10,9 +10,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour 
+public class BallMove : MonoBehaviour 
 {
 	#region フィールド変数
+
+	private Transform _myTransform = default;
+
 	#endregion
 
 	/// <summary>
@@ -20,6 +23,11 @@ public class #SCRIPTNAME# : MonoBehaviour
     /// </summary>
 	private void Start () 
 	{
-		
+		_myTransform = transform;
 	}
+
+    public void MoveBall(Vector3 moveDirection)
+    {
+		_myTransform.position += moveDirection * Time.deltaTime;
+    }
 }

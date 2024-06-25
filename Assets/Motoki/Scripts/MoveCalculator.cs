@@ -1,8 +1,7 @@
 /*-------------------------------------------------
-* Move.cs
+* MoveCalculator.cs
 * 
 * 作成日　2024/06/24
-* 更新日　2024/06/24
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -11,19 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour 
+/// <summary>
+/// 移動計算クラス
+/// </summary>
+public class MoveCalculator
 {
-	#region フィールド変数
-	#endregion
-
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
-		
-	}
-
 	/// <summary>
 	/// 回転計算処理
 	/// </summary>

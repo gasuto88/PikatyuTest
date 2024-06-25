@@ -2,7 +2,6 @@
 * Player.cs
 * 
 * 作成日　2024/06/18
-* 更新日　2024/06/18
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -24,19 +23,38 @@ public class Player : MonoBehaviour
 	// プレイヤー座標
 	private Vector3 _playerPosition = default;
 
+	// プレイヤーのQuaternion
+	private Quaternion _playerQuaternion = default;
+
+	// 移動方向
+	private Vector3 _moveDirection = default;
+
 	// 自身のTransform
 	private Transform _myTransform = default;
 
-	private Move _move = default;
+	// 攻撃クラス
+	private Attack _attack = default;
+
+	// 移動クラス
+	private MoveCalculator _moveCalculator = default;
 
 	// プレイヤー入力クラス
-	private UserInput _playerInput = default;
+	private UserInput _userInput = default;
+
 
     #endregion
 
-	/// <summary>
-	/// 更新前処理
-	/// </summary>
+    #region プロパティ
+
+	public Vector3 PlayerPosition { get => _playerPosition; }
+
+	public Quaternion PlayerRotation { get => _playerQuaternion; }
+
+    #endregion
+
+    /// <summary>
+    /// 更新前処理
+    /// </summary>
     private void Start()
     {
 		// 自身のTransformを設定
@@ -45,9 +63,14 @@ public class Player : MonoBehaviour
 		// 自身の座標を設定
 		_playerPosition = _myTransform.position;
 
+		// 自身の回転角度を設定
+		_playerQuaternion = _myTransform.rotation;
+
 		// Script取得
-		_playerInput = GetComponent<UserInput>();
-		_move = GetComponent<Move>();
+		_userInput = GetComponent<UserInput>();
+		_attack = GetComponent<Attack>();
+		_moveCalculator = new();
+		
 	}
 
 	/// <summary>
@@ -63,39 +86,43 @@ public class Player : MonoBehaviour
     /// </summary>
     public void UpdatePlayer()
     {
-        
-        if (_playerInput.IsNormalAttack)
+		if (_userInput.IsNormalAttack)
 		{
-            Debug.Log("通常攻撃");
+			
+		}
+		else if (_userInput.IsRoleAttack)
+		{
+
+		}
+		else if (_userInput.IsResurrection)
+        {
+
+        }
+		else if (_userInput.IsHoldTrigger)
+        {
+
         }
 
 		// 移動の入力を取得
-		Vector2 moveInput = _playerInput.MoveInput;
-
-		// 無入力だったら
-		if(moveInput == Vector2.zero)
-        {
-			return;
-        }
+		Vector2 moveInput = _userInput.MoveInput;
 
 		// 移動方向を計算
-		Vector3 moveDerection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
+		_moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
+		
+		// 回転を計算
+		_playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection,_playerDataAsset.RotationSpeed);
+		
+		// 無入力だったら
+		if (moveInput != Vector2.zero)
+        {
+			// 移動量を加算
+			_playerPosition += _moveCalculator.CalculationMove(_moveDirection,_playerDataAsset.MoveSpeed);
+		}
 
-		//_move.RotateMoveDirection(moveDerection);
-
-		//_move.CalculationMove(moveDerection);
+		// 回転角度を設定
+		_myTransform.rotation = _playerQuaternion;
 
 		// 移動を設定
 		_myTransform.position = _playerPosition;
-    }
-
-	
-
-	/// <summary>
-	/// 通常攻撃
-	/// </summary>
-	private void NormalAttack()
-    {
-
     }
 }

@@ -2,7 +2,6 @@
 * PlayerDataAsset.cs
 * 
 * 作成日　2024/06/24
-* 更新日　2024/06/24
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -11,6 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// プレイヤーデータクラス
+/// </summary>
 [System.Serializable]
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/PlayerData")]
 public class PlayerDataAsset : ScriptableObject

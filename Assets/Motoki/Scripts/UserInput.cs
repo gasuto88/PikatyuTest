@@ -2,7 +2,6 @@
 * PlayerInput.cs
 * 
 * 作成日　2024/06/18
-* 更新日　2024/06/18
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -89,7 +88,7 @@ public class UserInput : MonoBehaviour
         }
     }
 
-    public bool IsHideTrigger
+    public bool IsHoldTrigger
     {
         get
         {
