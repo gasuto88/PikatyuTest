@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* #SCRIPTNAME#.cs
+* ElectronicShocks.cs
 * 
 * 作成日　2024/06/27
 *
@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour 
+public class ElectronicShocks : MonoBehaviour,INormalAttack 
 {
 	#region フィールド変数
 	#endregion
@@ -22,4 +22,9 @@ public class #SCRIPTNAME# : MonoBehaviour
 	{
 		
 	}
+
+	public void NormalAttack()
+    {
+
+    }
 }

@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* #SCRIPTNAME#.cs
+* NormalAttackState.cs
 * 
 * 作成日　2024/06/27
 *
@@ -10,16 +10,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class #SCRIPTNAME# : MonoBehaviour 
-{
-	#region フィールド変数
-	#endregion
-
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
-		
-	}
-}
+//Dictionary<string, INormalAttack> _normalAttackState = new Dictionary<string, INormalAttack>()
+//{
+//    {"", new ElectronicShocks()},
+//    {"", new Punch() }
+//};

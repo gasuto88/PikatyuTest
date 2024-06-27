@@ -13,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// 攻撃クラス
 /// </summary>
-public abstract class AttackClass : MonoBehaviour 
+public abstract class Skill : MonoBehaviour 
 {
 	#region フィールド変数
 

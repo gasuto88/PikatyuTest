@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pikatyu : AttackClass
+public class Pikatyu : Skill
 {
     #region フィールド変数
 
