@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* BallMove.cs
+* Attack.cs
 * 
 * 作成日　2024/06/25
 *
@@ -10,24 +10,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallMove : MonoBehaviour 
+public class AttackClass : IAttack
 {
 	#region フィールド変数
-
-	private Transform _myTransform = default;
-
 	#endregion
 
 	/// <summary>
     /// 更新前処理
     /// </summary>
-	private void Start () 
+	public void Attack () 
 	{
-		_myTransform = transform;
+		
 	}
-
-    public void MoveBall()
-    {
-		_myTransform.position += _myTransform.forward * Time.deltaTime;
-    }
 }

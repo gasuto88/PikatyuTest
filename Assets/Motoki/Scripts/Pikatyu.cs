@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pikatyu : Attack
+public class Pikatyu : AttackClass
 {
     #region フィールド変数
 
@@ -24,6 +24,8 @@ public class Pikatyu : Attack
         {
             case NormalAttackState.START:
                 {
+
+
                     tempBall = _ballPool.TakeOut(_player.PlayerPosition, _player.PlayerRotation);
 
                     _normalAttackState = NormalAttackState.ATTACK;
@@ -32,7 +34,7 @@ public class Pikatyu : Attack
                 }              
             case NormalAttackState.ATTACK:
                 {
-                    //tempBall.MoveBall();
+                    tempBall.MoveBall();
 
                     break;
                 }             

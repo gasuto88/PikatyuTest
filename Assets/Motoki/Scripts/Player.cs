@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
 	private Transform _myTransform = default;
 
 	// 攻撃クラス
-	private Attack _attack = default;
+	private AttackClass _attack = default;
 
 	// 移動クラス
 	private MoveCalculator _moveCalculator = default;
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
 
 		// Script取得
 		_userInput = GetComponent<UserInput>();
-		_attack = GetComponent<Attack>();
+		_attack = GetComponent<AttackClass>();
 		_moveCalculator = new();
 		
 	}
@@ -88,7 +88,7 @@ public class Player : MonoBehaviour
     {
 		if (_userInput.IsNormalAttack)
 		{
-			
+			_attack.NormalAttackType = AttackClass.NormalAttackState.START;
 		}
 		else if (_userInput.IsRoleAttack)
 		{
