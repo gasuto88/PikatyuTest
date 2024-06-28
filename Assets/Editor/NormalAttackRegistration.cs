@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* Punch.cs
+* NormalAttackRegistration.cs
 * 
 * 作成日　2024/06/27
 *
@@ -9,22 +9,32 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
-public class Punch : INormalAttack
+[CustomEditor(typeof(Character))]
+public class NormalAttackRegistration : Editor
 {
 	#region フィールド変数
+
+	private Character _target = default;
+
 	#endregion
 
 	/// <summary>
     /// 更新前処理
     /// </summary>
-	private void Start () 
+	void OnEnable () 
 	{
-		
+
+		_target = (Character)target;
+
 	}
 
-	public void NormalAttack()
+    public override void OnInspectorGUI()
     {
+        base.OnInspectorGUI();
+
+
 
     }
 }

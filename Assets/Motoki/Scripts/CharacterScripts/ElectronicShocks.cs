@@ -10,7 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElectronicShocks : MonoBehaviour,INormalAttack 
+public class ElectronicShocks : INormalAttack 
 {
 	#region フィールド変数
 	#endregion
@@ -25,6 +25,8 @@ public class ElectronicShocks : MonoBehaviour,INormalAttack
 
 	public void NormalAttack()
     {
+
+		Debug.Log("ロジック");
 
     }
 }

@@ -5,12 +5,8 @@
 *
 * 作成者　本木大地
 -------------------------------------------------*/
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 /// <summary>
 /// ユーザー入力クラス

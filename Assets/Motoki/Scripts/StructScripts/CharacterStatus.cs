@@ -10,14 +10,14 @@
 public struct CharacterStatus
 {
 	// 名前
-	public readonly string _name;
+	public string _name;
 
 	// 体力
-	public readonly float _hp;
+	public float _hp;
 
 	// 防御
-	public readonly float _guard;
+	public float _guard;
 
 	// 移動速度
-	public readonly float _moveSpeed;
+	public float _moveSpeed;
 }
