@@ -78,51 +78,51 @@ public class Player : MonoBehaviour
 	/// </summary>
     private void Update()
     {
-        UpdatePlayer();
+        //UpdatePlayer();
     }
 
     /// <summary>
     /// プレイヤー更新処理
     /// </summary>
-    public void UpdatePlayer()
-    {
-		if (_userInput.IsNormalAttack)
-		{
-			_attack.NormalAttackType = Skill.NormalAttackState.START;
-		}
-		else if (_userInput.IsRoleAttack)
-		{
+  //  public void UpdatePlayer()
+  //  {
+		//if (_userInput.IsNormalAttack)
+		//{
+		//	_attack.NormalAttackType = Skill.NormalAttackState.START;
+		//}
+		//else if (_userInput.IsRoleAttack)
+		//{
 
-		}
-		else if (_userInput.IsResurrection)
-        {
+		//}
+		//else if (_userInput.IsResurrection)
+  //      {
 
-        }
-		else if (_userInput.IsHoldTrigger)
-        {
+  //      }
+		//else if (_userInput.IsHoldTrigger)
+  //      {
 
-        }
+  //      }
 
-		// 移動の入力を取得
-		Vector2 moveInput = _userInput.MoveInput;
+		//// 移動の入力を取得
+		//Vector2 moveInput = _userInput.MoveInput;
 
-		// 移動方向を計算
-		_moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
+		//// 移動方向を計算
+		//_moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
 		
-		// 回転を計算
-		_playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection,_playerDataAsset.RotationSpeed);
+		//// 回転を計算
+		//_playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection,_playerDataAsset.RotationSpeed);
 		
-		// 無入力だったら
-		if (moveInput != Vector2.zero)
-        {
-			// 移動量を加算
-			_playerPosition += _moveCalculator.CalculationMove(_moveDirection,_playerDataAsset.MoveSpeed);
-		}
+		//// 無入力だったら
+		//if (moveInput != Vector2.zero)
+  //      {
+		//	// 移動量を加算
+		//	_playerPosition += _moveCalculator.CalculationMove(_moveDirection,_playerDataAsset.MoveSpeed);
+		//}
 
-		// 回転角度を設定
-		_myTransform.rotation = _playerQuaternion;
+		//// 回転角度を設定
+		//_myTransform.rotation = _playerQuaternion;
 
-		// 移動を設定
-		_myTransform.position = _playerPosition;
-    }
+		//// 移動を設定
+		//_myTransform.position = _playerPosition;
+  //  }
 }

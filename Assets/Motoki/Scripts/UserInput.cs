@@ -34,6 +34,8 @@ public class UserInput : MonoBehaviour
 
     private PlayerInput _playerInput = default;
 
+    private Character _character = default;
+
     #endregion
 
     #region プロパティ
@@ -100,7 +102,9 @@ public class UserInput : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        // Script取得
         _playerInput = GetComponent<PlayerInput>();
+        _character = GetComponent<Character>();
 
         _playerInput.actions[_userInputDataAsset.MoveActionName].performed += OnMove;
         _playerInput.actions[_userInputDataAsset.MoveActionName].canceled += OnMove;
@@ -124,7 +128,6 @@ public class UserInput : MonoBehaviour
     /// <param name="context">入力情報</param>
     private void OnMove(InputAction.CallbackContext context)
     {
-        // 移動の入力取得
         _moveInput = context.ReadValue<Vector2>();
     }
 

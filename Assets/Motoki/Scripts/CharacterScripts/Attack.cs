@@ -15,11 +15,5 @@ public class Attack : Character
 	#region フィールド変数
 	#endregion
 
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
-		
-	}
+	
 }
