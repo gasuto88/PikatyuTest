@@ -127,8 +127,8 @@ public class UserInput : MonoBehaviour
     /// </summary>
     /// <param name="context">入力情報</param>
     private void OnMove(InputAction.CallbackContext context)
-    {
-        _moveInput = context.ReadValue<Vector2>();
+    {       
+        _moveInput = context.ReadValue<Vector2>();    
     }
 
     /// <summary>

@@ -13,6 +13,9 @@ using UnityEngine;
 public class ElectronicShocks : INormalAttack 
 {
 	#region フィールド変数
+
+	private BallPool _ballPool = default;
+
 	#endregion
 
 	/// <summary>
@@ -20,13 +23,18 @@ public class ElectronicShocks : INormalAttack
     /// </summary>
 	private void Start () 
 	{
-		
+		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
 	}
 
-	public void NormalAttack()
+	public IEnumerator NormalAttack(Vector3 myPosition, Quaternion myRotation)
     {
+		BallMove ball = _ballPool.TakeOut(myPosition, myRotation);
 
-		Debug.Log("ロジック");
+
+		yield return new WaitForSeconds(1f);
+		ball.MoveBall();
+
+		
 
     }
 }

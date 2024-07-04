@@ -23,8 +23,12 @@ public class Punch : INormalAttack
 		
 	}
 
-	public void NormalAttack()
+	public IEnumerator NormalAttack(Vector3 myPosition, Quaternion myRotation)
     {
+		Debug.Log("パンチ");
 
+		yield return new WaitForSeconds(1f);
+
+		
     }
 }

@@ -9,7 +9,9 @@
 /// </summary>
 public enum ActionState
 {
+    IDLE,
     MOVE,
     NORMAL_ATTACK,
-    ROLE_ATTACK
+    ROLE_ATTACK,
+    RESURRECTION
 }
