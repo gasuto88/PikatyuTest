@@ -20,26 +20,11 @@ public class Character : MonoBehaviour
 
     #region フィールド変数
 
-    [SerializeField,Header("通常攻撃方法")]
-    protected NormalAttackType _normalAttackType = default;
-
-    [SerializeField, Header("通常攻撃時間"), Min(0f)]
-    protected float _normalAttackTime = 0f;
-
-    [SerializeField, Header("通常攻撃距離"),Min(0f)]
-    protected float _normalAttackDistance = 0f;
-
-    [SerializeField, Header("ロール攻撃方法")]
-    protected RoleAttackType _roleAttackType = default;
-
-    [SerializeField, Header("移動速度"), Min(0f)]
-    protected float _moveSpeed = 0f;
-
-    [SerializeField, Header("回転速度"), Min(0f)]
-    protected float _rotationSpeed = 0f;
+    [SerializeField,Header("プレイヤーデータ")]
+    protected PlayerDataAsset _playerDataAsset = default;
 
     // 通常攻撃時間（初期化用）
-    protected float _initNormalAttackTime = 0f;
+    protected float _normalAttackTime = 0f;
 
     // プレイヤー座標
     protected Vector3 _playerPosition = default;
@@ -111,9 +96,7 @@ public class Character : MonoBehaviour
         _moveCalculator = new();
 
         // 通常攻撃時間を設定
-        _initNormalAttackTime = _normalAttackTime;
-
-        _characterStatus._moveSpeed = _moveSpeed;
+        _normalAttackTime = _playerDataAsset.NormalAttackTime;
     }
 
     private void Update()
@@ -171,7 +154,7 @@ public class Character : MonoBehaviour
         }
 
         // 回転を計算
-        _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _rotationSpeed);
+        _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerDataAsset.RotationSpeed);
 
         // 回転角度を設定
         _myTransform.rotation = _playerQuaternion;
@@ -190,20 +173,19 @@ public class Character : MonoBehaviour
         {
             case ActionState.IDLE:
                 {
-                    if (_userInput.IsNormalAttack)
+                    // 移動入力があったら移動状態にする
+                    if (moveInput != Vector2.zero)
+                    {
+                        _actionState = ActionState.MOVE;
+                    }
+                    else if (_userInput.IsNormalAttack)
                     {                      
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
                     else if (_userInput.IsRoleAttack)
                     {
                         _actionState = ActionState.ROLE_ATTACK;
-                    }
-
-                    // 移動入力があったら移動状態にする
-                    else if (moveInput != Vector2.zero)
-                    {
-                        _actionState = ActionState.MOVE;
-                    }
+                    }                
                     break;
                 }
             case ActionState.MOVE:
@@ -216,9 +198,8 @@ public class Character : MonoBehaviour
                     {
                         _actionState = ActionState.ROLE_ATTACK;
                     }
-
                     // 移動入力がなかったら
-                    if (moveInput == Vector2.zero)
+                    else if (moveInput == Vector2.zero)
                     {
                         _actionState = ActionState.IDLE;
                     }
@@ -250,7 +231,7 @@ public class Character : MonoBehaviour
         _moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
 
         // 移動量を加算
-        _playerPosition += _moveCalculator.CalculationMove(_moveDirection, _characterStatus._moveSpeed);
+        _playerPosition += _moveCalculator.CalculationMove(_moveDirection, _playerDataAsset.MoveSpeed);
     }
 
     /// <summary>
@@ -264,10 +245,10 @@ public class Character : MonoBehaviour
             case AttackState.INIT:
                 {
                     // 通常攻撃のインターフェイスを取得
-                    _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_normalAttackType];
+                    _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_playerDataAsset.TypeNormalAttack];
 
                     // 敵の方向取得して回転
-                    Transform targetTransform = _iSearch.TargetSearch(_playerPosition,_normalAttackDistance,LAYER_ENEMY);
+                    Transform targetTransform = _iSearch.TargetSearch(_playerPosition,_playerDataAsset.NormalAttackDistance,LAYER_ENEMY);
 
                     // 範囲内に敵がいたら
                     if (targetTransform != null)
@@ -293,7 +274,7 @@ public class Character : MonoBehaviour
 
                     if (_normalAttackTime <= 0f)
                     {
-                        _normalAttackTime = _initNormalAttackTime;
+                        _normalAttackTime = _playerDataAsset.NormalAttackTime;
 
                         _attackState = AttackState.EXIT;
                     }

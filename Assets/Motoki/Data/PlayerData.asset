@@ -15,13 +15,15 @@ MonoBehaviour:
   _playerName: "\u30BC\u30ED"
   _playerHp: 10
   _defense: 5
-  _moveSpeed: 4
+  _moveSpeed: 10
   _rotationSpeed: 100
-  _shotPower: 1
+  _shotSpeed: 1
   _holdDistance: 1
+  _normalAttackType: 0
   _normalAttackDistance: 2
   _normalAttackTime: 1
-  _normalAttackPower: 5
+  _normalAttackSpeed: 5
+  _normalAttackDamage: 0
   _roleAttackTime: 1
   _roleAttackCoolTime: 5
   _burstRadius: 1

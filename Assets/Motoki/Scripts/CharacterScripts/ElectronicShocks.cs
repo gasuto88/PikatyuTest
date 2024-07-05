@@ -39,11 +39,10 @@ public class ElectronicShocks : INormalAttack
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)
     {
-		_ball.MoveBall();			
+		
 	}
 	public void Exit(Vector3 myPosition, Quaternion myRotation)
     {
-		// 弾をしまう
-		_ballPool.Close(_ball);
+		
     }
 }

@@ -17,6 +17,8 @@ public class BallMove : MonoBehaviour
 	[SerializeField,Header("弾の速度"),Min(0f)]
 	private float _ballSpeed = 0f;
 
+	private BallPool _ballPool = default;
+
 	private Transform _myTransform = default;
 
 	#endregion
@@ -27,10 +29,19 @@ public class BallMove : MonoBehaviour
 	private void Awake () 
 	{
 		_myTransform = transform;
+
+		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
 	}
+
+    private void Update()
+    {
+		MoveBall();
+    }
 
     public void MoveBall()
     {
 		_myTransform.position += _myTransform.forward * _ballSpeed * Time.deltaTime;
+
+		
     }
 }
