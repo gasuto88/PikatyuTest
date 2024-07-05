@@ -1,12 +1,9 @@
 /*-------------------------------------------------
-* 作成日　2024/06/27
+* 作成日　2024/07/04
 *
 * 作成者　本木大地
 -------------------------------------------------*/
-
-
-public enum NormalAttackState
+public enum RoleAttackType
 {
-    ELECTRONIC_SHOCKS,
-    PUNCH
+    ELECTRIC_BALL
 }

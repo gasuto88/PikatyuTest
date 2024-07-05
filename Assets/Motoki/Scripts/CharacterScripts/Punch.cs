@@ -15,20 +15,18 @@ public class Punch : INormalAttack
 	#region フィールド変数
 	#endregion
 
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
+	public void Init(Vector3 myPosition, Quaternion myRotation)
 	{
-		
+
 	}
 
-	public IEnumerator NormalAttack(Vector3 myPosition, Quaternion myRotation)
-    {
-		Debug.Log("パンチ");
+	public void Execute(Vector3 myPosition, Quaternion myRotation)
+	{
 
-		yield return new WaitForSeconds(1f);
 
-		
-    }
+	}
+	public void Exit(Vector3 myPosition, Quaternion myRotation)
+	{
+
+	}
 }

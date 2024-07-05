@@ -248,8 +248,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba06967f80d2cde44bc3314b1d40aa28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _normalAttackState: 1
-  _moveSpeed: 20
+  _normalAttackType: 0
+  _normalAttackTime: 0.5
+  _normalAttackDistance: 10
+  _roleAttackType: 0
+  _moveSpeed: 10
   _rotationSpeed: 100
 --- !u!114 &4709912009175005260
 MonoBehaviour:

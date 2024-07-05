@@ -14,6 +14,9 @@ public class BallMove : MonoBehaviour
 {
 	#region フィールド変数
 
+	[SerializeField,Header("弾の速度"),Min(0f)]
+	private float _ballSpeed = 0f;
+
 	private Transform _myTransform = default;
 
 	#endregion
@@ -21,13 +24,13 @@ public class BallMove : MonoBehaviour
 	/// <summary>
     /// 更新前処理
     /// </summary>
-	private void Start () 
+	private void Awake () 
 	{
 		_myTransform = transform;
 	}
 
     public void MoveBall()
     {
-		_myTransform.position += _myTransform.forward * Time.deltaTime;
+		_myTransform.position += _myTransform.forward * _ballSpeed * Time.deltaTime;
     }
 }

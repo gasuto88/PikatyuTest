@@ -10,31 +10,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElectronicShocks : INormalAttack 
+public class ElectronicShocks : INormalAttack
 {
-	#region フィールド変数
+	#region 定数
 
-	private BallPool _ballPool = default;
+	private const float ATTACK_TIME = 1f;
+
+    #endregion
+
+    #region フィールド変数
+
+    private BallPool _ballPool = default;
+
+	private BallMove _ball = default;
 
 	#endregion
 
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
+	public ElectronicShocks()
+    {		
 		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
 	}
 
-	public IEnumerator NormalAttack(Vector3 myPosition, Quaternion myRotation)
+	public void Init(Vector3 myPosition, Quaternion myRotation)
     {
-		BallMove ball = _ballPool.TakeOut(myPosition, myRotation);
+		// 弾を取り出す
+		_ball = _ballPool.TakeOut(myPosition,myRotation);
+    }
 
-
-		yield return new WaitForSeconds(1f);
-		ball.MoveBall();
-
-		
-
+	public void Execute(Vector3 myPosition, Quaternion myRotation)
+    {
+		_ball.MoveBall();			
+	}
+	public void Exit(Vector3 myPosition, Quaternion myRotation)
+    {
+		// 弾をしまう
+		_ballPool.Close(_ball);
     }
 }

@@ -8,5 +8,9 @@ using UnityEngine;
 
 public interface INormalAttack
 {
-     IEnumerator NormalAttack(Vector3 myPosition,Quaternion myRotation);
+    void Init(Vector3 myPosition, Quaternion myRotation);
+
+    void Execute(Vector3 myPosition, Quaternion myRotation);
+
+    void Exit(Vector3 myPosition, Quaternion myRotation);
 }

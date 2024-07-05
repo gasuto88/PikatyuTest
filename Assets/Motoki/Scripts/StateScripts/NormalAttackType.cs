@@ -3,9 +3,10 @@
 *
 * 作成者　本木大地
 -------------------------------------------------*/
-using UnityEngine;
 
-public interface ISearch
+
+public enum NormalAttackType
 {
-    public Transform TargetSearch(Vector3 myPosition, float distance,string layer);
+    ELECTRONIC_SHOCKS,
+    PUNCH
 }
