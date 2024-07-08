@@ -12,6 +12,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
+/// <summary>
+/// キャラクタークラス
+/// </summary>
 [System.Serializable]
 public class Character : MonoBehaviour
 {
@@ -22,6 +25,9 @@ public class Character : MonoBehaviour
 
     [SerializeField,Header("プレイヤーデータ")]
     protected PlayerDataAsset _playerDataAsset = default;
+
+    [SerializeField, Header("通常攻撃方法")]
+    protected NormalAttackType _normalAttackType = default;
 
     // 通常攻撃時間（初期化用）
     protected float _normalAttackTime = 0f;
@@ -38,13 +44,11 @@ public class Character : MonoBehaviour
     // プレイヤー入力クラス
     protected UserInput _userInput = default;
 
+    // 移動計算クラス
     protected MoveCalculator _moveCalculator = default;
 
     // 自身のTransform
     protected Transform _myTransform = default;
-
-    // キャラクターステータス
-    protected CharacterStatus _characterStatus = default;
 
     // 行動状態
     protected ActionState _actionState = default;
@@ -52,11 +56,16 @@ public class Character : MonoBehaviour
     // 生存状態
     protected AliveState _aliveState = default;
 
-    protected AttackState _attackState = default;
+    
+    protected AttackProcess _attackState = default;
 
     protected INormalAttack _iNormalAttack = default;
 
     protected ISearch _iSearch = default;
+
+    protected NormalAttackDataAsset _normalAttackData = default;
+
+    protected AttackDataManager _skillManager = default;
 
     protected int _normalAttackNumber = 0;
 
@@ -90,13 +99,19 @@ public class Character : MonoBehaviour
 
         // Script取得
         _userInput = GetComponent<UserInput>();
-
-        _iSearch = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ISearch>();
+        GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
+        _skillManager = gameManager.GetComponent<AttackDataManager>();
+        _iSearch = gameManager.GetComponent<ISearch>();
         
         _moveCalculator = new();
 
+        // 通常攻撃のインターフェイスを取得
+        _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_normalAttackType];
+
+        _normalAttackData = _skillManager.ReturnNormalAttackData((int)_normalAttackType);
+
         // 通常攻撃時間を設定
-        _normalAttackTime = _playerDataAsset.NormalAttackTime;
+        _normalAttackTime = _normalAttackData.NormalAttackTime;
     }
 
     private void Update()
@@ -242,13 +257,10 @@ public class Character : MonoBehaviour
         switch (_attackState)
         {
             // 初期化
-            case AttackState.INIT:
+            case AttackProcess.INIT:
                 {
-                    // 通常攻撃のインターフェイスを取得
-                    _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_playerDataAsset.TypeNormalAttack];
-
                     // 敵の方向取得して回転
-                    Transform targetTransform = _iSearch.TargetSearch(_playerPosition,_playerDataAsset.NormalAttackDistance,LAYER_ENEMY);
+                    Transform targetTransform = _iSearch.TargetSearch(_playerPosition,_normalAttackData.NormalAttackDistance,LAYER_ENEMY);
 
                     // 範囲内に敵がいたら
                     if (targetTransform != null)
@@ -261,12 +273,12 @@ public class Character : MonoBehaviour
                     }
                     _iNormalAttack.Init(_playerPosition, _playerQuaternion);
 
-                    _attackState = AttackState.EXECUTE;
+                    _attackState = AttackProcess.EXECUTE;
 
                     break;
                 }
             // 実行
-            case AttackState.EXECUTE:
+            case AttackProcess.EXECUTE:
                 {
                     _iNormalAttack.Execute(_playerPosition, _playerQuaternion);
 
@@ -274,19 +286,19 @@ public class Character : MonoBehaviour
 
                     if (_normalAttackTime <= 0f)
                     {
-                        _normalAttackTime = _playerDataAsset.NormalAttackTime;
+                        _normalAttackTime = _normalAttackData.NormalAttackTime;
 
-                        _attackState = AttackState.EXIT;
+                        _attackState = AttackProcess.EXIT;
                     }
 
                     break;
                 }
             // 終了
-            case AttackState.EXIT:
+            case AttackProcess.EXIT:
                 {
                     _iNormalAttack.Exit(_playerPosition, _playerQuaternion);
 
-                    _attackState = AttackState.INIT;
+                    _attackState = AttackProcess.INIT;
 
                     _actionState = ActionState.IDLE;
                     

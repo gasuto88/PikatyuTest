@@ -9,16 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2f42c81c7478b54a87dc310813b85b5, type: 3}
-  m_Name: PlayerData
+  m_Script: {fileID: 11500000, guid: 082388bf0febaaf419c0b17c06dc4578, type: 3}
+  m_Name: ElectricBallData
   m_EditorClassIdentifier: 
-  _playerName: "\u30BC\u30ED"
-  _playerHp: 10
-  _defense: 5
-  _moveSpeed: 10
-  _rotationSpeed: 100
-  _shotSpeed: 1
-  _holdDistance: 1
   _roleAttackTime: 1
   _roleAttackCoolTime: 5
   _burstRadius: 1

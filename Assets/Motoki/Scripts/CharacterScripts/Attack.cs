@@ -10,10 +10,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public class Attack : Character
 {
 	#region フィールド変数
+
+	[SerializeField, Header("ロール攻撃方法")]
+	private AttackRoleType _attackRoleType = default;
+
 	#endregion
 
 	

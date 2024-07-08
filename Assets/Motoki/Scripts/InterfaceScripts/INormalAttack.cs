@@ -8,9 +8,18 @@ using UnityEngine;
 
 public interface INormalAttack
 {
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
     void Init(Vector3 myPosition, Quaternion myRotation);
 
+    /// <summary>
+    /// 実行処理
+    /// </summary>
     void Execute(Vector3 myPosition, Quaternion myRotation);
 
+    /// <summary>
+    /// 終了処理
+    /// </summary>
     void Exit(Vector3 myPosition, Quaternion myRotation);
 }

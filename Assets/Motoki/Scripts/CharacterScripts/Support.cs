@@ -13,13 +13,10 @@ using UnityEngine;
 public class Support : Character
 {
 	#region フィールド変数
+
+	[SerializeField, Header("ロール攻撃方法")]
+	private SupportRoleType _supportRoleType = default;
+
 	#endregion
 
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
-		
-	}
 }

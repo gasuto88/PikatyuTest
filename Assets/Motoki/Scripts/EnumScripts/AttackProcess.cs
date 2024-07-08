@@ -3,7 +3,11 @@
 *
 * 作成者　本木大地
 -------------------------------------------------*/
-public enum AttackState
+
+/// <summary>
+/// 攻撃手順
+/// </summary>
+public enum AttackProcess
 {
     INIT,
     EXECUTE,

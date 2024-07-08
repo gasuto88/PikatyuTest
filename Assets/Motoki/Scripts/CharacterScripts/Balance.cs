@@ -13,13 +13,9 @@ using UnityEngine;
 public class Balance : Character
 {
 	#region フィールド変数
-	#endregion
 
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
-		
-	}
+	[SerializeField, Header("ロール攻撃方法")]
+	private BalanceRoleType _balanceRoleType = default;
+
+	#endregion
 }

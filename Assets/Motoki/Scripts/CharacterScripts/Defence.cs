@@ -13,13 +13,10 @@ using UnityEngine;
 public class Defence : Character
 {
 	#region フィールド変数
+
+	[SerializeField, Header("ロール攻撃方法")]
+	private DefenceRoleType _defenceRoleType = default;
+
 	#endregion
 
-	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
-	{
-		
-	}
 }

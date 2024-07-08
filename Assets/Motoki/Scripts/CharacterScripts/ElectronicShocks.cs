@@ -10,6 +10,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 電気ショッククラス
+/// </summary>
 public class ElectronicShocks : INormalAttack
 {
 	#region 定数
@@ -22,8 +25,6 @@ public class ElectronicShocks : INormalAttack
 
     private BallPool _ballPool = default;
 
-	private BallMove _ball = default;
-
 	#endregion
 
 	public ElectronicShocks()
@@ -34,7 +35,7 @@ public class ElectronicShocks : INormalAttack
 	public void Init(Vector3 myPosition, Quaternion myRotation)
     {
 		// 弾を取り出す
-		_ball = _ballPool.TakeOut(myPosition,myRotation);
+		_ballPool.TakeOut(myPosition,myRotation);
     }
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)

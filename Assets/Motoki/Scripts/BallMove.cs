@@ -12,12 +12,21 @@ using UnityEngine;
 
 public class BallMove : MonoBehaviour 
 {
+	#region 定数
+
+	// レイヤーの名前
+	protected const string LAYER_ENEMY = "Enemy";
+
+	#endregion
+
 	#region フィールド変数
 
-	[SerializeField,Header("弾の速度"),Min(0f)]
+	[SerializeField,Header("弾の速度kamo"),Min(0f)]
 	private float _ballSpeed = 0f;
 
 	private BallPool _ballPool = default;
+
+	private CollisionManager _collisionManager = default;
 
 	private Transform _myTransform = default;
 
@@ -30,7 +39,10 @@ public class BallMove : MonoBehaviour
 	{
 		_myTransform = transform;
 
-		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
+		// Script取得
+		GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
+		_ballPool = gameManager.GetComponent<BallPool>();
+		_collisionManager = gameManager.GetComponent<CollisionManager>();
 	}
 
     private void Update()
@@ -42,6 +54,13 @@ public class BallMove : MonoBehaviour
     {
 		_myTransform.position += _myTransform.forward * _ballSpeed * Time.deltaTime;
 
-		
+		Transform targetCharacter = _collisionManager.CollisionTarget(
+			_myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);		
+
+		if (targetCharacter != null)
+        {
+			_ballPool.Close(this);
+        }
+
     }
 }
