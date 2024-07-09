@@ -35,7 +35,8 @@ public class ElectronicShocks : INormalAttack
 	public void Init(Vector3 myPosition, Quaternion myRotation)
     {
 		// 弾を取り出す
-		_ballPool.TakeOut(myPosition,myRotation);
+		BallMove ball = _ballPool.TakeOut(myPosition,myRotation);
+		//ball.TargetTransform = 
     }
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)

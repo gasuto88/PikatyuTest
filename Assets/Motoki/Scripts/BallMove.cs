@@ -24,18 +24,26 @@ public class BallMove : MonoBehaviour
 	[SerializeField,Header("弾の速度kamo"),Min(0f)]
 	private float _ballSpeed = 0f;
 
+	private Transform _targetTransform = default;
+
 	private BallPool _ballPool = default;
 
 	private CollisionManager _collisionManager = default;
 
 	private Transform _myTransform = default;
 
-	#endregion
+    #endregion
 
-	/// <summary>
+    #region プロパティ
+
+	public Transform TargetTransform { get => _targetTransform; set => _targetTransform = value; }
+
+    #endregion
+
+    /// <summary>
     /// 更新前処理
     /// </summary>
-	private void Awake () 
+    private void Awake () 
 	{
 		_myTransform = transform;
 
@@ -52,7 +60,9 @@ public class BallMove : MonoBehaviour
 
     public void MoveBall()
     {
-		_myTransform.position += _myTransform.forward * _ballSpeed * Time.deltaTime;
+		Vector3 targetDirection = _targetTransform.position - _myTransform.position;
+
+		_myTransform.position += targetDirection * _ballSpeed * Time.deltaTime;
 
 		Transform targetCharacter = _collisionManager.CollisionTarget(
 			_myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);		

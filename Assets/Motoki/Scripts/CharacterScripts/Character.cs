@@ -23,7 +23,7 @@ public class Character : MonoBehaviour
 
     #region フィールド変数
 
-    [SerializeField,Header("プレイヤーデータ")]
+    [SerializeField, Header("プレイヤーデータ")]
     protected PlayerDataAsset _playerDataAsset = default;
 
     [SerializeField, Header("通常攻撃方法")]
@@ -56,7 +56,7 @@ public class Character : MonoBehaviour
     // 生存状態
     protected AliveState _aliveState = default;
 
-    
+
     protected AttackProcess _attackState = default;
 
     protected INormalAttack _iNormalAttack = default;
@@ -102,7 +102,7 @@ public class Character : MonoBehaviour
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
         _skillManager = gameManager.GetComponent<AttackDataManager>();
         _iSearch = gameManager.GetComponent<ISearch>();
-        
+
         _moveCalculator = new();
 
         // 通常攻撃のインターフェイスを取得
@@ -127,8 +127,11 @@ public class Character : MonoBehaviour
         // 移動の入力を取得
         Vector2 moveInput = _userInput.MoveInput;
 
-        ActionStateMachine(moveInput);
-        
+        // 敵を取得
+        Transform targetTransform = _iSearch.TargetSearch(_playerPosition, _normalAttackData.NormalAttackDistance, LAYER_ENEMY);
+
+        ActionStateMachine(moveInput, targetTransform);
+
         switch (_actionState)
         {
             // 待機
@@ -140,7 +143,7 @@ public class Character : MonoBehaviour
                 }
             // 移動
             case ActionState.MOVE:
-                {              
+                {
                     Move(moveInput);
 
                     break;
@@ -148,7 +151,7 @@ public class Character : MonoBehaviour
             // 通常攻撃
             case ActionState.NORMAL_ATTACK:
                 {
-                    NormalAttack();
+                    NormalAttack(targetTransform);
 
                     break;
                 }
@@ -182,7 +185,7 @@ public class Character : MonoBehaviour
     /// 行動状態管理処理
     /// </summary>
     /// <param name="moveInput">移動入力</param>
-    private void ActionStateMachine(Vector2 moveInput)
+    private void ActionStateMachine(Vector2 moveInput,Transform targetTransform)
     {
         switch (_actionState)
         {
@@ -193,19 +196,21 @@ public class Character : MonoBehaviour
                     {
                         _actionState = ActionState.MOVE;
                     }
-                    else if (_userInput.IsNormalAttack)
-                    {                      
+                    else if (_userInput.IsNormalAttack
+                        && targetTransform != null)
+                    {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
                     else if (_userInput.IsRoleAttack)
                     {
                         _actionState = ActionState.ROLE_ATTACK;
-                    }                
+                    }
                     break;
                 }
             case ActionState.MOVE:
                 {
-                    if (_userInput.IsNormalAttack)
+                    if (_userInput.IsNormalAttack
+                        && targetTransform != null)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
@@ -252,25 +257,19 @@ public class Character : MonoBehaviour
     /// <summary>
     /// 通常攻撃処理
     /// </summary>
-    private void NormalAttack()
+    private void NormalAttack(Transform targetTransform)
     {
         switch (_attackState)
         {
             // 初期化
             case AttackProcess.INIT:
-                {
-                    // 敵の方向取得して回転
-                    Transform targetTransform = _iSearch.TargetSearch(_playerPosition,_normalAttackData.NormalAttackDistance,LAYER_ENEMY);
+                {              
+                    // 敵の方向を取得
+                    _moveDirection = targetTransform.position - _playerPosition;
 
-                    // 範囲内に敵がいたら
-                    if (targetTransform != null)
-                    {
-                        // 敵の方向を取得
-                        _moveDirection = targetTransform.position - _playerPosition;
+                    // 敵の方向を向く
+                    _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
 
-                        // 敵の方向を向く
-                        _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
-                    }
                     _iNormalAttack.Init(_playerPosition, _playerQuaternion);
 
                     _attackState = AttackProcess.EXECUTE;
@@ -301,7 +300,7 @@ public class Character : MonoBehaviour
                     _attackState = AttackProcess.INIT;
 
                     _actionState = ActionState.IDLE;
-                    
+
                     break;
                 }
             default:
