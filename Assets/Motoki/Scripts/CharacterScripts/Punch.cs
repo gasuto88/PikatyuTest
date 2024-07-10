@@ -15,7 +15,7 @@ public class Punch : INormalAttack
 	#region フィールド変数
 	#endregion
 
-	public void Init(Vector3 myPosition, Quaternion myRotation)
+	public void Init(Vector3 myPosition, Quaternion myRotation, Transform targetTransform)
 	{
 
 	}

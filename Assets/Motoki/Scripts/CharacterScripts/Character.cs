@@ -270,7 +270,7 @@ public class Character : MonoBehaviour
                     // 敵の方向を向く
                     _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
 
-                    _iNormalAttack.Init(_playerPosition, _playerQuaternion);
+                    _iNormalAttack.Init(_playerPosition, _playerQuaternion,targetTransform);
 
                     _attackState = AttackProcess.EXECUTE;
 

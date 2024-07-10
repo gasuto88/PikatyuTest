@@ -11,7 +11,7 @@ public interface INormalAttack
     /// <summary>
     /// 初期化処理
     /// </summary>
-    void Init(Vector3 myPosition, Quaternion myRotation);
+    void Init(Vector3 myPosition, Quaternion myRotation,Transform targetTransform);
 
     /// <summary>
     /// 実行処理

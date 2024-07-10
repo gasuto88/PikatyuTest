@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b84e319cda438c5429d6193a70e58d19, type: 3}
   m_Name: ElectronicShocksData
   m_EditorClassIdentifier: 
-  _normalAttackDistance: 3
+  _normalAttackDistance: 5
   _normalAttackTime: 1
   _normalAttackSpeed: 5
   _normalAttackDamage: 5

@@ -32,11 +32,11 @@ public class ElectronicShocks : INormalAttack
 		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
 	}
 
-	public void Init(Vector3 myPosition, Quaternion myRotation)
+	public void Init(Vector3 myPosition, Quaternion myRotation,Transform targetTransform)
     {
 		// 弾を取り出す
 		BallMove ball = _ballPool.TakeOut(myPosition,myRotation);
-		//ball.TargetTransform = 
+		ball.TargetTransform = targetTransform;
     }
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)

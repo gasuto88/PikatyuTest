@@ -21,7 +21,7 @@ public class BallMove : MonoBehaviour
 
 	#region フィールド変数
 
-	[SerializeField,Header("弾の速度kamo"),Min(0f)]
+	[SerializeField,Header("弾の速度"),Min(0f)]
 	private float _ballSpeed = 0f;
 
 	private Transform _targetTransform = default;
@@ -53,20 +53,32 @@ public class BallMove : MonoBehaviour
 		_collisionManager = gameManager.GetComponent<CollisionManager>();
 	}
 
+	/// <summary>
+	/// 更新処理
+	/// </summary>
     private void Update()
     {
 		MoveBall();
     }
 
+	/// <summary>
+	/// 弾の移動処理
+	/// </summary>
     public void MoveBall()
     {
+		// 敵の方向を計算
 		Vector3 targetDirection = _targetTransform.position - _myTransform.position;
 
-		_myTransform.position += targetDirection * _ballSpeed * Time.deltaTime;
+		_myTransform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
 
+		// 敵に向かって移動
+		_myTransform.position += _myTransform.forward * _ballSpeed * Time.deltaTime;
+
+		// 衝突した敵を取得
 		Transform targetCharacter = _collisionManager.CollisionTarget(
 			_myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);		
 
+		// 衝突したら弾をしまう
 		if (targetCharacter != null)
         {
 			_ballPool.Close(this);
