@@ -19,6 +19,8 @@ public class ElectronicShocks : INormalAttack
 
 	private const float ATTACK_TIME = 1f;
 
+	private const float BALL_SPEED = 10f;
+
     #endregion
 
     #region フィールド変数
@@ -32,11 +34,13 @@ public class ElectronicShocks : INormalAttack
 		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
 	}
 
-	public void Init(Vector3 myPosition, Quaternion myRotation,Transform targetTransform)
+	public void Init(Vector3 myPosition, Quaternion myRotation,Character myCharacter,Transform targetTransform)
     {
 		// 弾を取り出す
 		BallMove ball = _ballPool.TakeOut(myPosition,myRotation);
+		ball.BallSpeed = BALL_SPEED;
 		ball.TargetTransform = targetTransform;
+		ball.ShotCharacter = myCharacter;		
     }
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)

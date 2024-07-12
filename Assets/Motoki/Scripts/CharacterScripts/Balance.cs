@@ -9,7 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
 public class Balance : Character
 {
 	#region フィールド変数
@@ -18,4 +18,10 @@ public class Balance : Character
 	private BalanceRoleType _balanceRoleType = default;
 
 	#endregion
+
+	protected override void Init()
+	{
+		_roleAttackData = _skillManager.ReturnRoleAttackData(this, (int)_balanceRoleType);
+		_iRoleAttack = RoleAttackEnum._roleAttackEnum.Values.ToArray()[(int)_balanceRoleType];
+	}
 }

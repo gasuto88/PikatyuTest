@@ -40,17 +40,8 @@ public class PlayerDataAsset : ScriptableObject
 	[SerializeField, Header("ホールド判定距離"), Min(0f)]
 	private float _holdDistance = 1f;
 
-	[Space(20)]
-	[Header("【ロール攻撃】")]
-
-	[SerializeField, Header("ロール攻撃時間"), Min(0f)]
-	private float _roleAttackTime = 1f;
-
-	[SerializeField, Header("ロール攻撃クールタイム")]
-	private float _roleAttackCoolTime = 5f;
-
-	[SerializeField, Header("バーストの半径")]
-	private float _burstRadius = 1f;
+	[SerializeField,Header("長押し時間"),Min(0f)]
+	private float _longPressTime = 0f;
 
 	#endregion
 
@@ -70,11 +61,7 @@ public class PlayerDataAsset : ScriptableObject
 
 	public float HoldDistance { get => _holdDistance; set => _holdDistance = value; }
 
-	public float RoleAttackTime { get => _roleAttackTime; set => _roleAttackTime = value; }
-
-	public float RoleAttackCoolTime { get => _roleAttackCoolTime; set => _roleAttackCoolTime = value; }
-	
-	public float BurstRadius { get => _burstRadius; set => _burstRadius = value; }
+	public float LongPressTime { get => _longPressTime; set => _longPressTime = value; }
 
 	#endregion
 }

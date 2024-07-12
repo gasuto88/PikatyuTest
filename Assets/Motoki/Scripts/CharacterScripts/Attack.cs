@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Attack : Character
 {
@@ -17,7 +18,11 @@ public class Attack : Character
 	[SerializeField, Header("ロール攻撃方法")]
 	private AttackRoleType _attackRoleType = default;
 
-	#endregion
+    #endregion
 
-	
+    protected override void Init()
+    {
+        _roleAttackData = _skillManager.ReturnRoleAttackData(this, (int)_attackRoleType);
+        _iRoleAttack = RoleAttackEnum._roleAttackEnum.Values.ToArray()[(int)_normalAttackType];
+    }
 }

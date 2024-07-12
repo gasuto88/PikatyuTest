@@ -10,12 +10,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 攻撃データ管理クラス
+/// </summary>
 public class AttackDataManager : MonoBehaviour
 {
     #region フィールド変数
 
     [SerializeField, Header("通常攻撃データ")]
     private NormalAttackDataAsset[] _normalAttackDatas = default;
+
+    [SerializeField,Header("アタックのロールデータ")]
+    private RoleAttackDataAsset[] _attackRoleDatas = default;
+
+    [SerializeField, Header("ディフェンスのロールデータ")]
+    private RoleAttackDataAsset[] _defenceRoleDatas = default;
+
+    [SerializeField, Header("サポートのロールデータ")]
+    private RoleAttackDataAsset[] _supportRoleDatas = default;
+
+    [SerializeField, Header("バランスのロールデータ")]
+    private RoleAttackDataAsset[] _balanceRoleDatas = default;
 
     #endregion
 
@@ -29,4 +44,33 @@ public class AttackDataManager : MonoBehaviour
         return _normalAttackDatas[attackNumber];       
     }
 
+    public RoleAttackDataAsset ReturnRoleAttackData(Character roleType,int attackNumber)
+    {
+        switch (roleType)
+        {
+            case Attack:
+                {
+                    return _attackRoleDatas[attackNumber];                   
+                }
+            case Defence:
+                {
+                    return _defenceRoleDatas[attackNumber];
+                }
+            case Support:
+                {
+                    return _supportRoleDatas[attackNumber];
+                }
+            case Balance:
+                {
+                    return _balanceRoleDatas[attackNumber];
+                }
+            default:
+                {
+
+                }
+                break;
+        }
+
+        return null;
+    }
 }

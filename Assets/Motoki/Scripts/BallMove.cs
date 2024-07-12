@@ -21,7 +21,7 @@ public class BallMove : MonoBehaviour
 
 	#region フィールド変数
 
-	[SerializeField,Header("弾の速度"),Min(0f)]
+	// 弾の速度
 	private float _ballSpeed = 0f;
 
 	private Transform _targetTransform = default;
@@ -32,11 +32,17 @@ public class BallMove : MonoBehaviour
 
 	private Transform _myTransform = default;
 
+	private Character _shotCharacter = default;
+
     #endregion
 
     #region プロパティ
 
+	public float BallSpeed { get => _ballSpeed; set => _ballSpeed = value; }
+
 	public Transform TargetTransform { get => _targetTransform; set => _targetTransform = value; }
+
+	public Character ShotCharacter { get => _shotCharacter; set => _shotCharacter = value; }
 
     #endregion
 
@@ -81,6 +87,7 @@ public class BallMove : MonoBehaviour
 		// 衝突したら弾をしまう
 		if (targetCharacter != null)
         {
+			_shotCharacter.IsNormalAttack = false;
 			_ballPool.Close(this);
         }
 

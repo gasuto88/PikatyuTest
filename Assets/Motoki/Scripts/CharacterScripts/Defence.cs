@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Defence : Character
 {
@@ -19,4 +20,9 @@ public class Defence : Character
 
 	#endregion
 
+	protected override void Init()
+	{
+		_roleAttackData = _skillManager.ReturnRoleAttackData(this, (int)_defenceRoleType);
+		_iRoleAttack = RoleAttackEnum._roleAttackEnum.Values.ToArray()[(int)_defenceRoleType];
+	}
 }

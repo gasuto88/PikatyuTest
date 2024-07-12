@@ -56,20 +56,29 @@ public class Character : MonoBehaviour
     // 生存状態
     protected AliveState _aliveState = default;
 
-
     protected AttackProcess _attackState = default;
 
+    protected RoleAttackProcess _roleAttackProcess = default;
+
     protected INormalAttack _iNormalAttack = default;
+
+    protected IRoleAttack _iRoleAttack = default;
 
     protected ISearch _iSearch = default;
 
     protected NormalAttackDataAsset _normalAttackData = default;
+
+    protected RoleAttackDataAsset _roleAttackData = default;
 
     protected AttackDataManager _skillManager = default;
 
     protected int _normalAttackNumber = 0;
 
     protected bool _isNomalAttack = false;
+
+    protected bool _isRoleAttack = false;
+
+    protected float _longPressTime = 0f;
 
     #endregion
 
@@ -80,6 +89,8 @@ public class Character : MonoBehaviour
     public Quaternion PlayerRotation { get => _playerQuaternion; }
 
     public int NormalAttackNumber { get => _normalAttackNumber; set => _normalAttackNumber = value; }
+
+    public bool IsNormalAttack { get => _isNomalAttack; set => _isNomalAttack = value; }
 
     #endregion
 
@@ -108,11 +119,22 @@ public class Character : MonoBehaviour
         // 通常攻撃のインターフェイスを取得
         _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_normalAttackType];
 
+        // 通常攻撃データを取得
         _normalAttackData = _skillManager.ReturnNormalAttackData((int)_normalAttackType);
 
         // 通常攻撃時間を設定
         _normalAttackTime = _normalAttackData.NormalAttackTime;
+
+        _longPressTime = _playerDataAsset.LongPressTime;
+      
+        Init();
     }
+
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
+    protected virtual void Init() { }
+  
 
     private void Update()
     {
@@ -158,6 +180,8 @@ public class Character : MonoBehaviour
             // ロール攻撃
             case ActionState.ROLE_ATTACK:
                 {
+                    RoleAttack();
+
                     break;
                 }
             // 蘇生
@@ -197,7 +221,8 @@ public class Character : MonoBehaviour
                         _actionState = ActionState.MOVE;
                     }
                     else if (_userInput.IsNormalAttack
-                        && targetTransform != null)
+                        && targetTransform != null
+                        && !_isNomalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
@@ -210,7 +235,8 @@ public class Character : MonoBehaviour
             case ActionState.MOVE:
                 {
                     if (_userInput.IsNormalAttack
-                        && targetTransform != null)
+                        && targetTransform != null
+                        && !_isNomalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
@@ -263,14 +289,15 @@ public class Character : MonoBehaviour
         {
             // 初期化
             case AttackProcess.INIT:
-                {              
+                {
+                    _isNomalAttack = true;
                     // 敵の方向を取得
                     _moveDirection = targetTransform.position - _playerPosition;
 
                     // 敵の方向を向く
                     _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
 
-                    _iNormalAttack.Init(_playerPosition, _playerQuaternion,targetTransform);
+                    _iNormalAttack.Init(_playerPosition, _playerQuaternion,this,targetTransform);
 
                     _attackState = AttackProcess.EXECUTE;
 
@@ -307,6 +334,21 @@ public class Character : MonoBehaviour
                 {
                     break;
                 }
+        }
+    }
+
+    
+
+    private void RoleAttack()
+    {
+        switch (_roleAttackProcess)
+        {
+            case RoleAttackProcess.SHORT:
+                break;
+            case RoleAttackProcess.LONG:
+                break;
+            default:
+                break;
         }
     }
 
