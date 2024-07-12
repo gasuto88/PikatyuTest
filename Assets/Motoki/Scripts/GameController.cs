@@ -13,7 +13,7 @@ using UnityEngine;
 /// <summary>
 /// ゲーム管理クラス
 /// </summary>
-public class GameManager : MonoBehaviour 
+public class GameController : MonoBehaviour 
 {
 	#region フィールド変数	
 
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
 	private void Start () 
 	{
-				
+		
 	}
 
 	/// <summary>

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ElectronicShocksData
   m_EditorClassIdentifier: 
   _normalAttackDistance: 5
-  _normalAttackTime: 0.1
+  _normalAttackTime: 0.2
   _normalAttackSpeed: 5
   _normalAttackDamage: 5
+  _normalAttackCoolTime: 2

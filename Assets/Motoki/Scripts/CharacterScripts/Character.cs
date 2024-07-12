@@ -29,8 +29,11 @@ public class Character : MonoBehaviour
     [SerializeField, Header("通常攻撃方法")]
     protected NormalAttackType _normalAttackType = default;
 
-    // 通常攻撃時間（初期化用）
+    // 通常攻撃時間
     protected float _normalAttackTime = 0f;
+
+    // 通常攻撃クールタイム
+    protected float _normalAttackCoolTime = 0f;
 
     // プレイヤー座標
     protected Vector3 _playerPosition = default;
@@ -74,7 +77,7 @@ public class Character : MonoBehaviour
 
     protected int _normalAttackNumber = 0;
 
-    protected bool _isNomalAttack = false;
+    protected bool _isNormalAttack = false;
 
     protected bool _isRoleAttack = false;
 
@@ -90,7 +93,7 @@ public class Character : MonoBehaviour
 
     public int NormalAttackNumber { get => _normalAttackNumber; set => _normalAttackNumber = value; }
 
-    public bool IsNormalAttack { get => _isNomalAttack; set => _isNomalAttack = value; }
+    public bool IsNormalAttack { get => _isNormalAttack; set => _isNormalAttack = value; }
 
     #endregion
 
@@ -125,6 +128,9 @@ public class Character : MonoBehaviour
         // 通常攻撃時間を設定
         _normalAttackTime = _normalAttackData.NormalAttackTime;
 
+        // 通常攻撃クールタイムを設定
+        _normalAttackCoolTime = _normalAttackData.NormalAttackCoolTime;
+
         _longPressTime = _playerDataAsset.LongPressTime;
       
         Init();
@@ -153,6 +159,18 @@ public class Character : MonoBehaviour
         Transform targetTransform = _iSearch.TargetSearch(_playerPosition, _normalAttackData.NormalAttackDistance, LAYER_ENEMY);
 
         ActionStateMachine(moveInput, targetTransform);
+
+        if (_isNormalAttack)
+        {
+            _normalAttackCoolTime -= Time.deltaTime;
+
+            if(_normalAttackCoolTime <= 0f)
+            {
+                _normalAttackCoolTime = _normalAttackData.NormalAttackCoolTime;
+
+                _isNormalAttack = false;
+            }
+        }
 
         switch (_actionState)
         {
@@ -222,7 +240,7 @@ public class Character : MonoBehaviour
                     }
                     else if (_userInput.IsNormalAttack
                         && targetTransform != null
-                        && !_isNomalAttack)
+                        && !_isNormalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
@@ -236,7 +254,7 @@ public class Character : MonoBehaviour
                 {
                     if (_userInput.IsNormalAttack
                         && targetTransform != null
-                        && !_isNomalAttack)
+                        && !_isNormalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
@@ -290,7 +308,7 @@ public class Character : MonoBehaviour
             // 初期化
             case AttackProcess.INIT:
                 {
-                    _isNomalAttack = true;
+                    _isNormalAttack = true;
                     // 敵の方向を取得
                     _moveDirection = targetTransform.position - _playerPosition;
 

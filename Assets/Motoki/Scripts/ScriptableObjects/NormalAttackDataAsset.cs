@@ -29,6 +29,9 @@ public class NormalAttackDataAsset : ScriptableObject
 	[SerializeField, Header("通常攻撃ダメージ"), Min(0f)]
 	protected float _normalAttackDamage = 0f;
 
+	[SerializeField,Header("通常攻撃クールタイム"), Min(0f)]
+	protected float _normalAttackCoolTime = 0f;
+
 	#endregion
 
 	#region プロパティ
@@ -41,5 +44,7 @@ public class NormalAttackDataAsset : ScriptableObject
 
 	public float NormalAttackDamage { get => _normalAttackDamage; set => _normalAttackDamage = value; }
 
-	#endregion
+	public float NormalAttackCoolTime { get => _normalAttackCoolTime; set => _normalAttackCoolTime = value; }
+
+    #endregion
 }

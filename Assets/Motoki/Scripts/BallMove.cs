@@ -86,8 +86,7 @@ public class BallMove : MonoBehaviour
 
 		// 衝突したら弾をしまう
 		if (targetCharacter != null)
-        {
-			_shotCharacter.IsNormalAttack = false;
+        {			
 			_ballPool.Close(this);
         }
 
