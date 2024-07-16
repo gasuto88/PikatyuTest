@@ -17,21 +17,19 @@ public class ElectronicShocks : INormalAttack
 {
 	#region 定数
 
-	private const float ATTACK_TIME = 1f;
-
 	private const float BALL_SPEED = 10f;
 
     #endregion
 
     #region フィールド変数
 
-    private BallPool _ballPool = default;
+    private ElectronicShocksPool _ballPool = default;
 
 	#endregion
 
 	public ElectronicShocks()
     {		
-		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<BallPool>();
+		_ballPool = GameObject.FindGameObjectWithTag("GameManager").GetComponent<ElectronicShocksPool>();
 	}
 
 	public void Init(Vector3 myPosition, Quaternion myRotation,Character myCharacter,Transform targetTransform)

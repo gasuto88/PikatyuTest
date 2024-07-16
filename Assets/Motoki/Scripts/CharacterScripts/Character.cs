@@ -41,6 +41,8 @@ public class Character : MonoBehaviour
     // 移動方向
     protected Vector3 _moveDirection = default;
 
+    protected Vector3 _roleAttackDirection = default;
+
     // プレイヤーのQuaternion
     protected Quaternion _playerQuaternion = default;
 
@@ -229,6 +231,8 @@ public class Character : MonoBehaviour
     /// <param name="moveInput">移動入力</param>
     private void ActionStateMachine(Vector2 moveInput,Transform targetTransform)
     {
+        ChangeRoleAttackDirection();
+
         switch (_actionState)
         {
             case ActionState.IDLE:
@@ -244,9 +248,10 @@ public class Character : MonoBehaviour
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
-                    else if (_userInput.IsRoleAttack)
+                    else if (_userInput.IsRoleAttack
+                        && _roleAttackProcess != RoleAttackProcess.IDLE)
                     {
-                        _actionState = ActionState.ROLE_ATTACK;
+                        _roleAttackProcess = RoleAttackProcess.SHORT;
                     }
                     break;
                 }
@@ -260,7 +265,7 @@ public class Character : MonoBehaviour
                     }
                     else if (_userInput.IsRoleAttack)
                     {
-                        _actionState = ActionState.ROLE_ATTACK;
+                        _roleAttackProcess = RoleAttackProcess.SHORT;
                     }
                     // 移動入力がなかったら
                     else if (moveInput == Vector2.zero)
@@ -355,18 +360,61 @@ public class Character : MonoBehaviour
         }
     }
 
-    
-
     private void RoleAttack()
+    {
+        _moveDirection = _roleAttackDirection;
+        // 敵の方向を向く
+        _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
+
+        //_iRoleAttack.Init(_playerPosition,_playerQuaternion,this);
+    }
+
+    private void ChangeRoleAttackDirection()
     {
         switch (_roleAttackProcess)
         {
             case RoleAttackProcess.SHORT:
-                break;
+                {
+                    _roleAttackDirection = _myTransform.forward;
+
+                    if (!_userInput.IsRoleAttack)
+                    {
+                        _actionState = ActionState.ROLE_ATTACK;
+                    }
+
+                    _longPressTime -= Time.deltaTime;
+
+                    if (_longPressTime <= 0f)
+                    {
+                        _longPressTime = _playerDataAsset.LongPressTime;
+
+                        _roleAttackProcess = RoleAttackProcess.LONG;
+                    }
+
+                    break;
+                }
             case RoleAttackProcess.LONG:
-                break;
+                {
+                    Vector3 attackDirectionInput = _userInput.AttackDirectionInput;
+
+                    _roleAttackDirection 
+                        = Vector3.forward * attackDirectionInput.y + Vector3.right * attackDirectionInput.x;
+
+                    if (_userInput.IsCancel)
+                    {
+                        _roleAttackProcess = RoleAttackProcess.IDLE;
+                    }
+                    if (!_userInput.IsRoleAttack)
+                    {
+                        _actionState = ActionState.ROLE_ATTACK;
+                    }
+
+                    break;
+                }
             default:
-                break;
+                {
+                    break;
+                }
         }
     }
 

@@ -26,7 +26,7 @@ public class BallMove : MonoBehaviour
 
 	private Transform _targetTransform = default;
 
-	private BallPool _ballPool = default;
+	private ElectronicShocksPool _ballPool = default;
 
 	private CollisionManager _collisionManager = default;
 
@@ -55,7 +55,7 @@ public class BallMove : MonoBehaviour
 
 		// Script取得
 		GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
-		_ballPool = gameManager.GetComponent<BallPool>();
+		_ballPool = gameManager.GetComponent<ElectronicShocksPool>();
 		_collisionManager = gameManager.GetComponent<CollisionManager>();
 	}
 

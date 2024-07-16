@@ -1,7 +1,7 @@
 /*-------------------------------------------------
-* BallPool.cs
+* ElectricBallPool.cs
 * 
-* 作成日　2024/06/25
+* 作成日　2024/07/
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -10,14 +10,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BallPool : MonoBehaviour 
+public class ElectricBallPool : MonoBehaviour 
 {
 	#region フィールド変数
 
-	[SerializeField,Header("生成する弾")]
+	[SerializeField, Header("生成する弾")]
 	private BallMove _createBall = default;
 
-	[SerializeField,Header("生成数")]
+	[SerializeField, Header("生成数")]
 	private uint _createCount = 0;
 
 	private Queue<BallMove> _ballMoves = new Queue<BallMove>();
@@ -25,21 +25,21 @@ public class BallPool : MonoBehaviour
 	#endregion
 
 	/// <summary>
-    /// 更新前処理
-    /// </summary>
-	private void Start () 
+	/// 更新前処理
+	/// </summary>
+	private void Start()
 	{
-        for (int i = 0; i < _createCount; i++)
-        {
+		for (int i = 0; i < _createCount; i++)
+		{
 			InstanceBall();
-        }
+		}
 	}
 
 	/// <summary>
 	/// 弾を生成する処理
 	/// </summary>
 	private void InstanceBall()
-    {
+	{
 		BallMove tempBall = Instantiate(_createBall);
 
 		// 弾を不可視化
@@ -53,11 +53,11 @@ public class BallPool : MonoBehaviour
 	/// 取り出す
 	/// </summary>
 	/// <param name="createTransform">生成するTransform</param>
-	public BallMove TakeOut(Vector3 myPosition,Quaternion myRotation)
-    {
+	public BallMove TakeOut(Vector3 myPosition, Quaternion myRotation)
+	{
 		// キューに弾がなかったら補充する
-		if(_ballMoves.Count <= 0)
-        {
+		if (_ballMoves.Count <= 0)
+		{
 			InstanceBall();
 		}
 
@@ -74,16 +74,16 @@ public class BallPool : MonoBehaviour
 		tempBall.transform.rotation = myRotation;
 
 		return tempBall;
-    }
+	}
 
 	/// <summary>
 	/// 弾をしまう
 	/// </summary>
 	/// <param name="closeBall">しまう弾</param>
 	public void Close(BallMove closeBall)
-    {
+	{
 		closeBall.gameObject.SetActive(false);
 
 		_ballMoves.Enqueue(closeBall);
-    }
+	}
 }

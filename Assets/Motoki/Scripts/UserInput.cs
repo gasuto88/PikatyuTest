@@ -20,6 +20,8 @@ public class UserInput : MonoBehaviour
 
     private Vector2 _moveInput = default;
 
+    private Vector2 _attackDirectionInput = default;
+
     // 通常攻撃判定
     private bool _isNormalAttack = false;
 
@@ -31,6 +33,9 @@ public class UserInput : MonoBehaviour
 
     // 掴み/投げ判定
     private bool _isHoldTrigger = false;
+
+    // キャンセル判定
+    private bool _isCancel = false;
 
     private PlayerInput _playerInput = default;
 
@@ -56,6 +61,25 @@ public class UserInput : MonoBehaviour
                 _moveInput.y = 0f;
             }
             return _moveInput;
+        }
+    }
+
+    public Vector2 AttackDirectionInput
+    {
+        get
+        {
+            // 入力デッドゾーン
+            if (-_userInputDataAsset.InputDeadZoon <= _attackDirectionInput.x
+                && _attackDirectionInput.x <= _userInputDataAsset.InputDeadZoon)
+            {
+                _attackDirectionInput.x = 0f;
+            }
+            if (-_userInputDataAsset.InputDeadZoon <= _attackDirectionInput.y
+                && _attackDirectionInput.y <= _userInputDataAsset.InputDeadZoon)
+            {
+                _attackDirectionInput.y = 0f;
+            }
+            return _attackDirectionInput;
         }
     }
 
@@ -94,6 +118,14 @@ public class UserInput : MonoBehaviour
         }
     }
 
+    public bool IsCancel
+    {
+        get
+        {
+            return _isCancel;
+        }
+    }
+
     #endregion
 
 
@@ -109,17 +141,23 @@ public class UserInput : MonoBehaviour
         _playerInput.actions[_userInputDataAsset.MoveActionName].performed += OnMove;
         _playerInput.actions[_userInputDataAsset.MoveActionName].canceled += OnMove;
 
+        _playerInput.actions[_userInputDataAsset.AttackDirectionName].performed += OnAttackDirection;
+        _playerInput.actions[_userInputDataAsset.AttackDirectionName].canceled += OnAttackDirection;
+
         _playerInput.actions[_userInputDataAsset.NormalAttackName].started += OnNormalAttackDown;
         _playerInput.actions[_userInputDataAsset.NormalAttackName].canceled += OnNormalAttackUp;
 
-        _playerInput.actions[_userInputDataAsset.RoleAttackName].started += OnNormalAttackDown;
-        _playerInput.actions[_userInputDataAsset.RoleAttackName].canceled += OnNormalAttackUp;
+        _playerInput.actions[_userInputDataAsset.RoleAttackName].started += OnRoleAttackDown;
+        _playerInput.actions[_userInputDataAsset.RoleAttackName].canceled += OnRoleAttackUp;
 
         _playerInput.actions[_userInputDataAsset.ResurrectionName].started += OnResurrectionDown;
         _playerInput.actions[_userInputDataAsset.ResurrectionName].canceled += OnResurrectionUp;
 
         _playerInput.actions[_userInputDataAsset.HoldTriggerName].started += OnHoldTriggerDown;
         _playerInput.actions[_userInputDataAsset.HoldTriggerName].canceled += OnHoldTriggerUp;
+
+        _playerInput.actions[_userInputDataAsset.CancelName].started += OnCancelDown;
+        _playerInput.actions[_userInputDataAsset.CancelName].started += OnCancelUp;
     }
 
     /// <summary>
@@ -129,6 +167,11 @@ public class UserInput : MonoBehaviour
     private void OnMove(InputAction.CallbackContext context)
     {       
         _moveInput = context.ReadValue<Vector2>();    
+    }
+
+    private void OnAttackDirection(InputAction.CallbackContext context)
+    {
+        _attackDirectionInput = context.ReadValue<Vector2>();
     }
 
     /// <summary>
@@ -198,5 +241,15 @@ public class UserInput : MonoBehaviour
     private void OnHoldTriggerUp(InputAction.CallbackContext context)
     {
         _isHoldTrigger = false;
+    }
+
+    private void OnCancelDown(InputAction.CallbackContext context)
+    {
+
+    }
+
+    private void OnCancelUp(InputAction.CallbackContext context)
+    {
+
     }
 }

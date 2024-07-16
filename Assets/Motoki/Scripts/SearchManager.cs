@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* Search.cs
+* SearchManager.cs
 * 
 * 作成日　2024/06/25
 *
@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Search : MonoBehaviour, ISearch
+public class SearchManager : MonoBehaviour, ISearch
 {
 	#region フィールド変数
 	#endregion

@@ -28,6 +28,9 @@ public class UserInputDataAsset : ScriptableObject
     [SerializeField, Header("移動名")]
     private string _moveActionName = "Move";
 
+    [SerializeField, Header("攻撃方向名")]
+    private string _attackDirectionName = "AttackDirection";
+
     [SerializeField, Header("通常攻撃名")]
     private string _normalAttackName = "NormalAttack";
 
@@ -40,6 +43,9 @@ public class UserInputDataAsset : ScriptableObject
     [SerializeField,Header("掴み/投げ名")]
     private string _holdTriggerName = "HoldTrigger";
 
+    [SerializeField, Header("キャンセル名")]
+    private string _cancelName = "Cancel";
+
     #endregion
 
     #region プロパティ
@@ -48,6 +54,8 @@ public class UserInputDataAsset : ScriptableObject
 
     public string MoveActionName { get => _moveActionName; set => _moveActionName = value; }
 
+    public string AttackDirectionName { get => _attackDirectionName; set => _attackDirectionName = value; }
+
     public string NormalAttackName { get => _normalAttackName; set => _normalAttackName = value; }
 
     public string RoleAttackName { get => _roleAttackName; set => _roleAttackName = value; }
@@ -55,6 +63,8 @@ public class UserInputDataAsset : ScriptableObject
     public string ResurrectionName { get => _resurrectionName; set => _resurrectionName = value; }
 
     public string HoldTriggerName { get => _holdTriggerName; set => _holdTriggerName = value; }
+
+    public string CancelName { get => _cancelName; set => _cancelName = value; }
 
     #endregion
 
