@@ -19,6 +19,4 @@ MonoBehaviour:
   _rotationSpeed: 100
   _shotSpeed: 1
   _holdDistance: 1
-  _roleAttackTime: 1
-  _roleAttackCoolTime: 5
-  _burstRadius: 1
+  _longPressTime: 0.3

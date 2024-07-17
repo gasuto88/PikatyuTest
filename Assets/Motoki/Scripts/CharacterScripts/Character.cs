@@ -315,10 +315,7 @@ public class Character : MonoBehaviour
                 {
                     _isNormalAttack = true;
                     // 敵の方向を取得
-                    _moveDirection = targetTransform.position - _playerPosition;
-
-                    // 敵の方向を向く
-                    _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
+                    _moveDirection = targetTransform.position - _playerPosition;                  
 
                     _iNormalAttack.Init(_playerPosition, _playerQuaternion,this,targetTransform);
 
@@ -362,9 +359,7 @@ public class Character : MonoBehaviour
 
     private void RoleAttack()
     {
-        _moveDirection = _roleAttackDirection;
-        // 敵の方向を向く
-        _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
+        _moveDirection = _roleAttackDirection;     
 
         //_iRoleAttack.Init(_playerPosition,_playerQuaternion,this);
     }
