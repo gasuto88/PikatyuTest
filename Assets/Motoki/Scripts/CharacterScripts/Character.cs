@@ -356,7 +356,7 @@ public class Character : MonoBehaviour
                 }
         }
     }
-
+    
     private void RoleAttack()
     {
         _moveDirection = _roleAttackDirection;     

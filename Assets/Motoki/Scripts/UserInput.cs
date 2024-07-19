@@ -39,8 +39,6 @@ public class UserInput : MonoBehaviour
 
     private PlayerInput _playerInput = default;
 
-    private Character _character = default;
-
     #endregion
 
     #region プロパティ
@@ -136,7 +134,6 @@ public class UserInput : MonoBehaviour
     {
         // Script取得
         _playerInput = GetComponent<PlayerInput>();
-        _character = GetComponent<Character>();
 
         _playerInput.actions[_userInputDataAsset.MoveActionName].performed += OnMove;
         _playerInput.actions[_userInputDataAsset.MoveActionName].canceled += OnMove;

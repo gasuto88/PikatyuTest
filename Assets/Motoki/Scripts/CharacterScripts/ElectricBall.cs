@@ -38,7 +38,7 @@ public class ElectricBall : IRoleAttack
         BallMove ball = _ballPool.TakeOut(myPosition, myRotation);
         ball.BallSpeed = BALL_SPEED;
         ball.TargetTransform = targetTransform;
-        ball.ShotCharacter = myCharacter;
+        ball.SetCharacter(myCharacter);
     }
     
     /// <summary>

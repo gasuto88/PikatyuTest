@@ -42,8 +42,6 @@ public class BallMove : MonoBehaviour
 
 	public Transform TargetTransform { get => _targetTransform; set => _targetTransform = value; }
 
-	public Character ShotCharacter { get => _shotCharacter; set => _shotCharacter = value; }
-
     #endregion
 
     /// <summary>
@@ -86,9 +84,15 @@ public class BallMove : MonoBehaviour
 
 		// 衝突したら弾をしまう
 		if (targetCharacter != null)
-        {			
+        {	
+
 			_ballPool.Close(this);
         }
 
     }
+
+	public void SetCharacter(Character shotCharacter)
+	{
+		_shotCharacter = shotCharacter;
+	}
 }
