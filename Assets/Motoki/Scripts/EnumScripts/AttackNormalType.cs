@@ -5,7 +5,7 @@
 -------------------------------------------------*/
 
 
-public enum NormalAttackType
+public enum AttackNormalType
 {
     ELECTRONIC_SHOCKS,
     PUNCH

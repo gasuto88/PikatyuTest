@@ -27,7 +27,7 @@ public class Character : MonoBehaviour
     protected PlayerDataAsset _playerDataAsset = default;
 
     [SerializeField, Header("通常攻撃方法")]
-    protected NormalAttackType _normalAttackType = default;
+    protected AttackNormalType _normalAttackType = default;
 
     // 通常攻撃時間
     protected float _normalAttackTime = 0f;
@@ -77,8 +77,6 @@ public class Character : MonoBehaviour
 
     protected AttackDataManager _skillManager = default;
 
-    protected int _normalAttackNumber = 0;
-
     protected bool _isNormalAttack = false;
 
     protected bool _isRoleAttack = false;
@@ -91,11 +89,7 @@ public class Character : MonoBehaviour
 
     public Vector3 PlayerPosition { get => _playerPosition; }
 
-    public Quaternion PlayerRotation { get => _playerQuaternion; }
-
-    public int NormalAttackNumber { get => _normalAttackNumber; set => _normalAttackNumber = value; }
-
-    public bool IsNormalAttack { get => _isNormalAttack; set => _isNormalAttack = value; }
+    public Quaternion PlayerQuaternion { get => _playerQuaternion; }
 
     #endregion
 

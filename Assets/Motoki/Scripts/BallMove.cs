@@ -36,13 +36,6 @@ public class BallMove : MonoBehaviour
 
     #endregion
 
-    #region プロパティ
-
-	public float BallSpeed { get => _ballSpeed; set => _ballSpeed = value; }
-
-	public Transform TargetTransform { get => _targetTransform; set => _targetTransform = value; }
-
-    #endregion
 
     /// <summary>
     /// 更新前処理
@@ -91,8 +84,10 @@ public class BallMove : MonoBehaviour
 
     }
 
-	public void SetCharacter(Character shotCharacter)
-	{
-		_shotCharacter = shotCharacter;
+	public void SetParameter(Character shotCharacter,Transform targetTrasform, float ballSpeed)
+    {
+		_shotCharacter = shotCharacter;	
+		_targetTransform = targetTrasform;
+		_ballSpeed = ballSpeed;
 	}
 }
