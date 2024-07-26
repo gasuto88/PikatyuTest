@@ -73,7 +73,7 @@ public class Character : MonoBehaviour
 
     protected NormalAttackDataAsset _normalAttackData = default;
 
-    protected RoleAttackDataAsset _roleAttackData = default;
+    protected RoleDataAsset _roleAttackData = default;
 
     protected AttackDataManager _skillManager = default;
 
@@ -116,10 +116,13 @@ public class Character : MonoBehaviour
         _moveCalculator = new();
 
         // 通常攻撃のインターフェイスを取得
-        _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_normalAttackType];
+        _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_normalAttackType];        
 
         // 通常攻撃データを取得
         _normalAttackData = _skillManager.ReturnNormalAttackData((int)_normalAttackType);
+
+        // 通常攻撃のダメージを設定する
+        _iNormalAttack.SetDamage(_normalAttackData.NormalAttackDamage);
 
         // 通常攻撃時間を設定
         _normalAttackTime = _normalAttackData.NormalAttackTime;

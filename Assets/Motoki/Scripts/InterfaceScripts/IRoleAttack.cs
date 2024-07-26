@@ -24,4 +24,6 @@ public interface IRoleAttack
     /// 終了処理
     /// </summary>
     void Exit(Vector3 myPosition, Quaternion myRotation);
+
+    void SetDamage(float damage);
 }

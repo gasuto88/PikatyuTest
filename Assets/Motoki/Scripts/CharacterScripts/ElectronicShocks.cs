@@ -15,13 +15,9 @@ using UnityEngine;
 /// </summary>
 public class ElectronicShocks : INormalAttack
 {
-	#region 定数
+	#region フィールド変数
 
-	private const float BALL_SPEED = 10f;
-
-    #endregion
-
-    #region フィールド変数
+	private float _damage = 0f;
 
     private ElectronicShocksPool _ballPool = default;
 
@@ -35,8 +31,8 @@ public class ElectronicShocks : INormalAttack
 	public void Init(Vector3 myPosition, Quaternion myRotation,Character myCharacter,Transform targetTransform)
     {
 		// 弾を取り出す
-		BallMove ball = _ballPool.TakeOut(myPosition,myRotation);
-		ball.SetParameter(myCharacter, targetTransform, BALL_SPEED);
+		Ball ball = _ballPool.TakeOut(myPosition,myRotation);
+		ball.SetParameter(myCharacter, targetTransform,_damage);
     }
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)
@@ -46,5 +42,10 @@ public class ElectronicShocks : INormalAttack
 	public void Exit(Vector3 myPosition, Quaternion myRotation)
     {
 		
+    }
+
+	public void SetDamage(float damage)
+    {
+		_damage = damage;
     }
 }

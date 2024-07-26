@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 082388bf0febaaf419c0b17c06dc4578, type: 3}
+  m_Script: {fileID: 11500000, guid: ffd9160123a26f74980ea69ce8a663c8, type: 3}
   m_Name: ElectricBallData
   m_EditorClassIdentifier: 
   _roleAttackTime: 1
   _roleAttackCoolTime: 5
   _burstRadius: 1
+  _ballSpeed: 2

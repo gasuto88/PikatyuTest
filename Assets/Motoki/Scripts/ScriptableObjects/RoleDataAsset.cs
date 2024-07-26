@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* RoleAttackDataAsset.cs
+* RoleDataAsset.cs
 * 
 * 作成日　2024/07/
 *
@@ -10,14 +10,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoleAttackDataAsset : ScriptableObject
+[System.Serializable]
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/RoleDataAsset")]
+public class RoleDataAsset : ScriptableObject
 {
 	#region フィールド変数
 
-	[SerializeField, Header("ロール攻撃時間"), Min(0f)]
+	[SerializeField, Header("ロール時間"), Min(0f)]
 	protected float _roleAttackTime = 1f;
 
-	[SerializeField, Header("ロール攻撃クールタイム")]
+	[SerializeField, Header("ロールクールタイム")]
 	protected float _roleAttackCoolTime = 5f;
 
 	[SerializeField, Header("バーストの半径")]

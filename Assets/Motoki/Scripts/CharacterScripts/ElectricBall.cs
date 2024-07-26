@@ -12,13 +12,9 @@ using UnityEngine;
 
 public class ElectricBall : IRoleAttack
 {
-    #region 定数
-
-    private const float BALL_SPEED = 10f;
-
-    #endregion
-
     #region フィールド変数
+
+    private float _damage = 0f;
 
     private ElectricBallPool _ballPool = default;
 
@@ -35,8 +31,8 @@ public class ElectricBall : IRoleAttack
     public void Init(Vector3 myPosition, Quaternion myRotation, Character myCharacter, Transform targetTransform)
     {
         // 弾を取り出す
-        BallMove ball = _ballPool.TakeOut(myPosition, myRotation);
-        ball.SetParameter(myCharacter, targetTransform, BALL_SPEED);
+        Ball ball = _ballPool.TakeOut(myPosition, myRotation);
+        ball.SetParameter(myCharacter, targetTransform,_damage);
     }
     
     /// <summary>
@@ -53,6 +49,11 @@ public class ElectricBall : IRoleAttack
     public void Exit(Vector3 myPosition, Quaternion myRotation)
     {
 
+    }
+
+    public void SetDamage(float damage)
+    {
+        _damage = damage;
     }
 
 }

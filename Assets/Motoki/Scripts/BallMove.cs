@@ -12,27 +12,9 @@ using UnityEngine;
 
 public class BallMove : MonoBehaviour 
 {
-	#region 定数
-
-	// レイヤーの名前
-	protected const string LAYER_ENEMY = "Enemy";
-
-	#endregion
-
 	#region フィールド変数
 
-	// 弾の速度
-	private float _ballSpeed = 0f;
-
-	private Transform _targetTransform = default;
-
-	private ElectronicShocksPool _ballPool = default;
-
-	private CollisionManager _collisionManager = default;
-
 	private Transform _myTransform = default;
-
-	private Character _shotCharacter = default;
 
     #endregion
 
@@ -43,51 +25,19 @@ public class BallMove : MonoBehaviour
     private void Awake () 
 	{
 		_myTransform = transform;
-
-		// Script取得
-		GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
-		_ballPool = gameManager.GetComponent<ElectronicShocksPool>();
-		_collisionManager = gameManager.GetComponent<CollisionManager>();
 	}
-
-	/// <summary>
-	/// 更新処理
-	/// </summary>
-    private void Update()
-    {
-		MoveBall();
-    }
 
 	/// <summary>
 	/// 弾の移動処理
 	/// </summary>
-    public void MoveBall()
+    public void MoveBall(Vector3 targetPosition,float ballSpeed)
     {
 		// 敵の方向を計算
-		Vector3 targetDirection = _targetTransform.position - _myTransform.position;
+		Vector3 targetDirection = targetPosition - _myTransform.position;
 
 		_myTransform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
 
 		// 敵に向かって移動
-		_myTransform.position += _myTransform.forward * _ballSpeed * Time.deltaTime;
-
-		// 衝突した敵を取得
-		Transform targetCharacter = _collisionManager.CollisionTarget(
-			_myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);		
-
-		// 衝突したら弾をしまう
-		if (targetCharacter != null)
-        {	
-
-			_ballPool.Close(this);
-        }
-
+		_myTransform.position += _myTransform.forward * ballSpeed * Time.deltaTime;
     }
-
-	public void SetParameter(Character shotCharacter,Transform targetTrasform, float ballSpeed)
-    {
-		_shotCharacter = shotCharacter;	
-		_targetTransform = targetTrasform;
-		_ballSpeed = ballSpeed;
-	}
 }

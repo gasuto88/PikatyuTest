@@ -21,16 +21,16 @@ public class AttackDataManager : MonoBehaviour
     private NormalAttackDataAsset[] _normalAttackDatas = default;
 
     [SerializeField,Header("アタックのロールデータ")]
-    private RoleAttackDataAsset[] _attackRoleDatas = default;
+    private RoleDataAsset[] _attackRoleDatas = default;
 
     [SerializeField, Header("ディフェンスのロールデータ")]
-    private RoleAttackDataAsset[] _defenceRoleDatas = default;
+    private RoleDataAsset[] _defenceRoleDatas = default;
 
     [SerializeField, Header("サポートのロールデータ")]
-    private RoleAttackDataAsset[] _supportRoleDatas = default;
+    private RoleDataAsset[] _supportRoleDatas = default;
 
     [SerializeField, Header("バランスのロールデータ")]
-    private RoleAttackDataAsset[] _balanceRoleDatas = default;
+    private RoleDataAsset[] _balanceRoleDatas = default;
 
     #endregion
 
@@ -44,7 +44,7 @@ public class AttackDataManager : MonoBehaviour
         return _normalAttackDatas[attackNumber];       
     }
 
-    public RoleAttackDataAsset ReturnRoleAttackData(Character roleType,int attackNumber)
+    public RoleDataAsset ReturnRoleAttackData(Character roleType,int attackNumber)
     {
         switch (roleType)
         {

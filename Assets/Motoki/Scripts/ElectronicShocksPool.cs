@@ -18,12 +18,12 @@ public class ElectronicShocksPool : MonoBehaviour
 	#region フィールド変数
 
 	[SerializeField,Header("生成する弾")]
-	private BallMove _createBall = default;
+	private Ball _createBall = default;
 
 	[SerializeField,Header("生成数")]
 	private uint _createCount = 0;
 
-	private Queue<BallMove> _ballMoves = new Queue<BallMove>();
+	private Queue<Ball> _ballMoves = new Queue<Ball>();
 
 	#endregion
 
@@ -43,7 +43,7 @@ public class ElectronicShocksPool : MonoBehaviour
 	/// </summary>
 	private void InstanceBall()
     {
-		BallMove tempBall = Instantiate(_createBall);
+		Ball tempBall = Instantiate(_createBall);
 
 		// 弾を不可視化
 		tempBall.gameObject.SetActive(false);
@@ -56,7 +56,7 @@ public class ElectronicShocksPool : MonoBehaviour
 	/// 取り出す
 	/// </summary>
 	/// <param name="createTransform">生成するTransform</param>
-	public BallMove TakeOut(Vector3 myPosition,Quaternion myRotation)
+	public Ball TakeOut(Vector3 myPosition,Quaternion myRotation)
     {
 		// キューに弾がなかったら補充する
 		if(_ballMoves.Count <= 0)
@@ -65,7 +65,7 @@ public class ElectronicShocksPool : MonoBehaviour
 		}
 
 		// キューから弾を取り出す
-		BallMove tempBall = _ballMoves.Dequeue();
+		Ball tempBall = _ballMoves.Dequeue();
 
 		// 弾を可視化
 		tempBall.gameObject.SetActive(true);
@@ -83,7 +83,7 @@ public class ElectronicShocksPool : MonoBehaviour
 	/// 弾をしまう
 	/// </summary>
 	/// <param name="closeBall">しまう弾</param>
-	public void Close(BallMove closeBall)
+	public void Close(Ball closeBall)
     {
 		closeBall.gameObject.SetActive(false);
 
