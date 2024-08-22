@@ -30,10 +30,17 @@ public class ElectronicShocks : INormalAttack
 
 	public void Init(Vector3 myPosition, Quaternion myRotation,Character myCharacter,Transform targetTransform)
     {
-		// 弾を取り出す
-		Ball ball = _ballPool.TakeOut(myPosition,myRotation);
-		ball.SetParameter(myCharacter, targetTransform,_damage);
+		
     }
+
+	public void Init(
+		Vector3 myPosition, Quaternion myRotation
+		, Character myCharacter, Transform targetTransform, float ballSpeed)
+    {
+		// 弾を取り出す
+		Ball ball = _ballPool.TakeOut(myPosition, myRotation);
+		ball.SetParameter(myCharacter, targetTransform, _damage,ballSpeed);
+	}
 
 	public void Execute(Vector3 myPosition, Quaternion myRotation)
     {

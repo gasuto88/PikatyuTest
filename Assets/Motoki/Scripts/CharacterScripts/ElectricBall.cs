@@ -32,7 +32,7 @@ public class ElectricBall : IRoleAttack
     {
         // 弾を取り出す
         Ball ball = _ballPool.TakeOut(myPosition, myRotation);
-        ball.SetParameter(myCharacter, targetTransform,_damage);
+        //ball.SetParameter(myCharacter, targetTransform,_damage);
     }
     
     /// <summary>

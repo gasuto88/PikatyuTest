@@ -71,10 +71,11 @@ public class Ball : MonoBehaviour
 		}
 	}
 
-	public void SetParameter(Character shotCharacter, Transform targetTrasform,float damage)
+	public void SetParameter(Character shotCharacter, Transform targetTrasform,float damage,float ballSpeed)
 	{
 		_shotCharacter = shotCharacter;
 		_targetTransform = targetTrasform;
-		_damage = damage;		
+		_damage = damage;
+		_ballSpeed = ballSpeed;
 	}
 }

@@ -11,7 +11,13 @@ public interface INormalAttack
     /// <summary>
     /// 初期化処理
     /// </summary>
-    void Init(Vector3 myPosition, Quaternion myRotation, Character myCharacter,Transform targetTransform);
+    void Init(
+        Vector3 myPosition, Quaternion myRotation
+        , Character myCharacter,Transform targetTransform);
+
+    void Init(
+        Vector3 myPosition, Quaternion myRotation
+        , Character myCharacter, Transform targetTransform, float ballSpeed);
 
     /// <summary>
     /// 実行処理

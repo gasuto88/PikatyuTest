@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* BallRoleAttackDataAsset.cs
+* BallRoleDataAsset.cs
 * 
 * 作成日　2024/07/
 *
@@ -11,8 +11,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/BallRoleAttackData")]
-public class BallRoleAttackDataAsset : RoleDataAsset 
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/BallRoleData")]
+public class BallRoleDataAsset : RoleDataAsset 
 {
     #region フィールド変数
 

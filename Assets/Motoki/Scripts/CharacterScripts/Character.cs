@@ -81,6 +81,8 @@ public class Character : MonoBehaviour
 
     protected bool _isRoleAttack = false;
 
+    protected bool _isBallNormal = false;
+
     protected float _longPressTime = 0f;
 
     #endregion
@@ -115,11 +117,12 @@ public class Character : MonoBehaviour
 
         _moveCalculator = new();
 
+
         // 通常攻撃のインターフェイスを取得
-        _iNormalAttack = NormalAttackEnum._normalAttackEnum.Values.ToArray()[(int)_normalAttackType];        
+        _iNormalAttack = NormalAttackEnum._ballNormalAttackEnum.Values.ToArray()[(int)_normalAttackType];
 
         // 通常攻撃データを取得
-        _normalAttackData = _skillManager.ReturnNormalAttackData((int)_normalAttackType);
+        _normalAttackData = _skillManager.ReturnNormalAttackData((int)_normalAttackType);   
 
         // 通常攻撃のダメージを設定する
         _iNormalAttack.SetDamage(_normalAttackData.NormalAttackDamage);
@@ -312,9 +315,17 @@ public class Character : MonoBehaviour
                 {
                     _isNormalAttack = true;
                     // 敵の方向を取得
-                    _moveDirection = targetTransform.position - _playerPosition;                  
+                    _moveDirection = targetTransform.position - _playerPosition;
 
-                    _iNormalAttack.Init(_playerPosition, _playerQuaternion,this,targetTransform);
+                    if (_isBallNormal)
+                    {
+                        _iNormalAttack.Init(_playerPosition, _playerQuaternion, this, targetTransform);
+                    }
+                    else
+                    {
+                        _iNormalAttack.Init(_playerPosition, _playerQuaternion, this, targetTransform);
+                    }
+                    
 
                     _attackState = AttackProcess.EXECUTE;
 

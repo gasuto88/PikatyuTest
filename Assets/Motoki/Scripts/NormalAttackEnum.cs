@@ -13,10 +13,12 @@ using UnityEngine;
 [Serializable]
 public static class NormalAttackEnum
 {
-    public static readonly Dictionary<string, INormalAttack> _normalAttackEnum = new Dictionary<string, INormalAttack>
+    /// <summary>
+    /// 弾あり
+    /// </summary>
+    public static readonly Dictionary<string, INormalAttack> _ballNormalAttackEnum = new Dictionary<string, INormalAttack>
     {
         {"ElectronicShocks", new ElectronicShocks()},
         {"Punch", new Punch() }
     };
-
 }

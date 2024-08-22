@@ -208,6 +208,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _normalAttackDatas:
+  - {fileID: 11400000, guid: 6cf8e0828534423478c1f9232cb45270, type: 2}
+  - {fileID: 11400000, guid: f7b597509ab5fd14faef0a65845f4dcd, type: 2}
   - {fileID: 11400000, guid: f7b597509ab5fd14faef0a65845f4dcd, type: 2}
   _attackRoleDatas:
   - {fileID: 11400000, guid: 1a14634111d490b45a05db376cc5e004, type: 2}
