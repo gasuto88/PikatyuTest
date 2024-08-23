@@ -31,27 +31,37 @@ public class Ball : MonoBehaviour
 	private Transform _targetTransform = default;
 
 	private BallMove _ballMove = default;
-	
-	private ElectronicShocksPool _ballPool = default;
 
 	private CollisionManager _collisionManager = default;
 
 	private Character _shotCharacter = default;
 
+	protected BallPool _ballPool = default;
+
 	#endregion
 
 	/// <summary>
-	/// 更新前処理
+	/// 初期化処理
 	/// </summary>
 	private void Awake () 
 	{
-		_ballMove = GetComponent<BallMove>();
+		_myTransform = transform;
 
 		// Script取得
-		GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
-		_ballPool = gameManager.GetComponent<ElectronicShocksPool>();
+		_ballMove = GetComponent<BallMove>();
+		GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");	
 		_collisionManager = gameManager.GetComponent<CollisionManager>();
+
+		Init();
 	}
+
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	protected virtual void Init()
+    {
+
+    }
 
 	/// <summary>
 	/// 更新処理

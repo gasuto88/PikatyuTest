@@ -14,14 +14,12 @@ public class Balance : Character
 {
 	#region フィールド変数
 
-	[SerializeField, Header("ロール攻撃方法")]
-	private BalanceRoleType _balanceRoleType = default;
+	
 
 	#endregion
 
 	protected override void Init()
 	{
-		_roleAttackData = _skillManager.ReturnRoleAttackData(this, (int)_balanceRoleType);
-		_iRoleAttack = RoleAttackEnum._roleAttackEnum.Values.ToArray()[(int)_balanceRoleType];
+		
 	}
 }

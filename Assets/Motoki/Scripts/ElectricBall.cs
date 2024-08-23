@@ -1,7 +1,7 @@
 /*-------------------------------------------------
-* BallPool.cs
+* ElectricBall.cs
 * 
-* 作成日　2024/06/25
+* 作成日　2024/08/
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -10,9 +10,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// 電気ショックプールクラス
-/// </summary>
-public class ElectronicShocksPool : BallPool 
+public class ElectricBall : Ball 
 {
+    protected override void Init()
+    {
+        _ballPool = GameObject.FindGameObjectWithTag("BallPool").GetComponent<ElectricBallPool>();
+    }
 }

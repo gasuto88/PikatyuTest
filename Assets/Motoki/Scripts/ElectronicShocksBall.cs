@@ -1,7 +1,7 @@
 /*-------------------------------------------------
-* Attack.cs
+* ElectronicShocksBall.cs
 * 
-* 作成日　2024/06/25
+* 作成日　2024/08/
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -9,17 +9,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
-public class Attack : Character
+public class ElectronicShocksBall : Ball 
 {
-	#region フィールド変数
-
-	
-    #endregion
-
     protected override void Init()
     {
-        
+        _ballPool = GameObject.FindGameObjectWithTag("BallPool").GetComponent<ElectronicShocksPool>();
     }
 }

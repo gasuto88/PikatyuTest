@@ -26,9 +26,6 @@ public class Character : MonoBehaviour
     [SerializeField, Header("プレイヤーデータ")]
     protected PlayerDataAsset _playerDataAsset = default;
 
-    [SerializeField, Header("通常攻撃方法")]
-    protected AttackNormalType _normalAttackType = default;
-
     // 通常攻撃時間
     protected float _normalAttackTime = 0f;
 
@@ -52,6 +49,8 @@ public class Character : MonoBehaviour
     // 移動計算クラス
     protected MoveCalculator _moveCalculator = default;
 
+    protected CollisionManager _collisionManager = default;
+
     // 自身のTransform
     protected Transform _myTransform = default;
 
@@ -65,23 +64,11 @@ public class Character : MonoBehaviour
 
     protected RoleAttackProcess _roleAttackProcess = default;
 
-    protected INormalAttack _iNormalAttack = default;
-
-    protected IRoleAttack _iRoleAttack = default;
-
     protected ISearch _iSearch = default;
-
-    protected NormalAttackDataAsset _normalAttackData = default;
-
-    protected RoleDataAsset _roleAttackData = default;
-
-    protected AttackDataManager _skillManager = default;
 
     protected bool _isNormalAttack = false;
 
     protected bool _isRoleAttack = false;
-
-    protected bool _isBallNormal = false;
 
     protected float _longPressTime = 0f;
 
@@ -112,28 +99,10 @@ public class Character : MonoBehaviour
         // Script取得
         _userInput = GetComponent<UserInput>();
         GameObject gameManager = GameObject.FindGameObjectWithTag("GameManager");
-        _skillManager = gameManager.GetComponent<AttackDataManager>();
+        _collisionManager = gameManager.GetComponent<CollisionManager>();
         _iSearch = gameManager.GetComponent<ISearch>();
 
         _moveCalculator = new();
-
-
-        // 通常攻撃のインターフェイスを取得
-        _iNormalAttack = NormalAttackEnum._ballNormalAttackEnum.Values.ToArray()[(int)_normalAttackType];
-
-        // 通常攻撃データを取得
-        _normalAttackData = _skillManager.ReturnNormalAttackData((int)_normalAttackType);   
-
-        // 通常攻撃のダメージを設定する
-        _iNormalAttack.SetDamage(_normalAttackData.NormalAttackDamage);
-
-        // 通常攻撃時間を設定
-        _normalAttackTime = _normalAttackData.NormalAttackTime;
-
-        // 通常攻撃クールタイムを設定
-        _normalAttackCoolTime = _normalAttackData.NormalAttackCoolTime;
-
-        _longPressTime = _playerDataAsset.LongPressTime;
       
         Init();
     }
@@ -142,7 +111,7 @@ public class Character : MonoBehaviour
     /// 初期化処理
     /// </summary>
     protected virtual void Init() { }
-  
+    
 
     private void Update()
     {
@@ -150,37 +119,20 @@ public class Character : MonoBehaviour
     }
 
     /// <summary>
-    /// キャラクターを更新する処理
+    /// キャラクター更新処理
     /// </summary>
-    private void UpdateCharacter()
+    protected virtual void UpdateCharacter()
     {
         // 移動の入力を取得
         Vector2 moveInput = _userInput.MoveInput;
 
-        // 敵を取得
-        Transform targetTransform = _iSearch.TargetSearch(_playerPosition, _normalAttackData.NormalAttackDistance, LAYER_ENEMY);
-
-        ActionStateMachine(moveInput, targetTransform);
-
-        if (_isNormalAttack)
-        {
-            _normalAttackCoolTime -= Time.deltaTime;
-
-            if(_normalAttackCoolTime <= 0f)
-            {
-                _normalAttackCoolTime = _normalAttackData.NormalAttackCoolTime;
-
-                _isNormalAttack = false;
-            }
-        }
+        ActionStateMachine(moveInput);
 
         switch (_actionState)
         {
             // 待機
             case ActionState.IDLE:
                 {
-
-
                     break;
                 }
             // 移動
@@ -193,7 +145,7 @@ public class Character : MonoBehaviour
             // 通常攻撃
             case ActionState.NORMAL_ATTACK:
                 {
-                    NormalAttack(targetTransform);
+                    NormalAttack();
 
                     break;
                 }
@@ -229,7 +181,7 @@ public class Character : MonoBehaviour
     /// 行動状態管理処理
     /// </summary>
     /// <param name="moveInput">移動入力</param>
-    private void ActionStateMachine(Vector2 moveInput,Transform targetTransform)
+    private void ActionStateMachine(Vector2 moveInput)
     {
         ChangeRoleAttackDirection();
 
@@ -243,7 +195,6 @@ public class Character : MonoBehaviour
                         _actionState = ActionState.MOVE;
                     }
                     else if (_userInput.IsNormalAttack
-                        && targetTransform != null
                         && !_isNormalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
@@ -258,7 +209,6 @@ public class Character : MonoBehaviour
             case ActionState.MOVE:
                 {
                     if (_userInput.IsNormalAttack
-                        && targetTransform != null
                         && !_isNormalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
@@ -306,70 +256,14 @@ public class Character : MonoBehaviour
     /// <summary>
     /// 通常攻撃処理
     /// </summary>
-    private void NormalAttack(Transform targetTransform)
+    protected virtual void NormalAttack()
     {
-        switch (_attackState)
-        {
-            // 初期化
-            case AttackProcess.INIT:
-                {
-                    _isNormalAttack = true;
-                    // 敵の方向を取得
-                    _moveDirection = targetTransform.position - _playerPosition;
-
-                    if (_isBallNormal)
-                    {
-                        _iNormalAttack.Init(_playerPosition, _playerQuaternion, this, targetTransform);
-                    }
-                    else
-                    {
-                        _iNormalAttack.Init(_playerPosition, _playerQuaternion, this, targetTransform);
-                    }
-                    
-
-                    _attackState = AttackProcess.EXECUTE;
-
-                    break;
-                }
-            // 実行
-            case AttackProcess.EXECUTE:
-                {
-                    _iNormalAttack.Execute(_playerPosition, _playerQuaternion);
-
-                    _normalAttackTime -= Time.deltaTime;
-
-                    if (_normalAttackTime <= 0f)
-                    {
-                        _normalAttackTime = _normalAttackData.NormalAttackTime;
-
-                        _attackState = AttackProcess.EXIT;
-                    }
-
-                    break;
-                }
-            // 終了
-            case AttackProcess.EXIT:
-                {
-                    _iNormalAttack.Exit(_playerPosition, _playerQuaternion);
-
-                    _attackState = AttackProcess.INIT;
-
-                    _actionState = ActionState.IDLE;
-
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
+       
     }
     
-    private void RoleAttack()
+    protected virtual void RoleAttack()
     {
-        _moveDirection = _roleAttackDirection;     
-
-        //_iRoleAttack.Init(_playerPosition,_playerQuaternion,this);
+        
     }
 
     private void ChangeRoleAttackDirection()

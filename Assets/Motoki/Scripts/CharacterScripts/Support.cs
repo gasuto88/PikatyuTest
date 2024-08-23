@@ -15,14 +15,12 @@ public class Support : Character
 {
 	#region フィールド変数
 
-	[SerializeField, Header("ロール攻撃方法")]
-	private SupportRoleType _supportRoleType = default;
+	
 
 	#endregion
 
 	protected override void Init()
 	{
-		_roleAttackData = _skillManager.ReturnRoleAttackData(this, (int)_supportRoleType);
-		_iRoleAttack = RoleAttackEnum._roleAttackEnum.Values.ToArray()[(int)_supportRoleType];
+		
 	}
 }
