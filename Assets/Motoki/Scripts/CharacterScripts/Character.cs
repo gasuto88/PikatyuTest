@@ -32,9 +32,6 @@ public class Character : MonoBehaviour
     // 通常攻撃クールタイム
     protected float _normalAttackCoolTime = 0f;
 
-    // プレイヤー座標
-    protected Vector3 _playerPosition = default;
-
     // 移動方向
     protected Vector3 _moveDirection = default;
 
@@ -51,6 +48,8 @@ public class Character : MonoBehaviour
 
     protected CollisionManager _collisionManager = default;
 
+    protected Rigidbody _rigidbody = default;
+
     // 自身のTransform
     protected Transform _myTransform = default;
 
@@ -60,7 +59,9 @@ public class Character : MonoBehaviour
     // 生存状態
     protected AliveState _aliveState = default;
 
-    protected AttackProcess _attackState = default;
+    protected AttackProcess _normalAttackState = default;
+
+    protected AttackProcess _roleState = default;
 
     protected RoleAttackProcess _roleAttackProcess = default;
 
@@ -76,8 +77,6 @@ public class Character : MonoBehaviour
 
     #region プロパティ
 
-    public Vector3 PlayerPosition { get => _playerPosition; }
-
     public Quaternion PlayerQuaternion { get => _playerQuaternion; }
 
     #endregion
@@ -90,9 +89,6 @@ public class Character : MonoBehaviour
         // 自身のTransformを設定
         _myTransform = transform;
 
-        // 自身の座標を設定
-        _playerPosition = _myTransform.position;
-
         // 自身の回転角度を設定
         _playerQuaternion = _myTransform.rotation;
 
@@ -103,7 +99,9 @@ public class Character : MonoBehaviour
         _iSearch = gameManager.GetComponent<ISearch>();
 
         _moveCalculator = new();
-      
+
+        _rigidbody = GetComponent<Rigidbody>();
+
         Init();
     }
 
@@ -111,7 +109,7 @@ public class Character : MonoBehaviour
     /// 初期化処理
     /// </summary>
     protected virtual void Init() { }
-    
+
 
     private void Update()
     {
@@ -174,7 +172,7 @@ public class Character : MonoBehaviour
         _myTransform.rotation = _playerQuaternion;
 
         // 移動を設定
-        _myTransform.position = _playerPosition;
+        //_myTransform.position = _playerPosition;
     }
 
     /// <summary>
@@ -250,7 +248,7 @@ public class Character : MonoBehaviour
         _moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
 
         // 移動量を加算
-        _playerPosition += _moveCalculator.CalculationMove(_moveDirection, _playerDataAsset.MoveSpeed);
+        _rigidbody.velocity = _moveCalculator.CalculationMove(_moveDirection, _playerDataAsset.MoveSpeed);
     }
 
     /// <summary>
@@ -258,61 +256,19 @@ public class Character : MonoBehaviour
     /// </summary>
     protected virtual void NormalAttack()
     {
-       
+
     }
-    
+    /// <summary>
+    /// ロール攻撃処理
+    /// </summary>
     protected virtual void RoleAttack()
     {
-        
+
     }
 
-    private void ChangeRoleAttackDirection()
+    protected virtual void ChangeRoleAttackDirection()
     {
-        switch (_roleAttackProcess)
-        {
-            case RoleAttackProcess.SHORT:
-                {
-                    _roleAttackDirection = _myTransform.forward;
-
-                    if (!_userInput.IsRoleAttack)
-                    {
-                        _actionState = ActionState.ROLE_ATTACK;
-                    }
-
-                    _longPressTime -= Time.deltaTime;
-
-                    if (_longPressTime <= 0f)
-                    {
-                        _longPressTime = _playerDataAsset.LongPressTime;
-
-                        _roleAttackProcess = RoleAttackProcess.LONG;
-                    }
-
-                    break;
-                }
-            case RoleAttackProcess.LONG:
-                {
-                    Vector3 attackDirectionInput = _userInput.AttackDirectionInput;
-
-                    _roleAttackDirection 
-                        = Vector3.forward * attackDirectionInput.y + Vector3.right * attackDirectionInput.x;
-
-                    if (_userInput.IsCancel)
-                    {
-                        _roleAttackProcess = RoleAttackProcess.IDLE;
-                    }
-                    if (!_userInput.IsRoleAttack)
-                    {
-                        _actionState = ActionState.ROLE_ATTACK;
-                    }
-
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
+        
     }
 
 }

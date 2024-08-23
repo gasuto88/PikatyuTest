@@ -41,7 +41,7 @@ public class MoveCalculator
 	/// <returns>移動量</returns>
 	public Vector3 CalculationMove(Vector3 moveDirection, float moveSpeed)
 	{
-		Vector3 moveVector = moveDirection * moveSpeed * Time.deltaTime;
+		Vector3 moveVector = moveDirection * moveSpeed;
 
 		return moveVector;
 	}
