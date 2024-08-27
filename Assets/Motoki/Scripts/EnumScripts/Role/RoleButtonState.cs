@@ -3,7 +3,7 @@
 *
 * 作成者　本木大地
 -------------------------------------------------*/
-public enum RoleAttackProcess
+public enum RoleButtonState
 {
     IDLE,
     SHORT,

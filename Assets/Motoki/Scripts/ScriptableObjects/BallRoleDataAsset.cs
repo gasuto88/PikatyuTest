@@ -19,11 +19,16 @@ public class BallRoleDataAsset : RoleDataAsset
     [SerializeField, Header("弾の速度"), Min(0f)]
     private float _ballSpeed = 0f;
 
+    [SerializeField, Header("弾のダメージ"), Min(0f)]
+    private float _ballDamage = 0f;
+
     #endregion
 
     #region プロパティ
 
     public float BallSpeed { get => _ballSpeed; set => _ballSpeed = value; }
+
+    public float BallDamage { get => _ballDamage; set => _ballDamage = value; }
 
     #endregion
 }

@@ -30,14 +30,32 @@ public class BallMove : MonoBehaviour
 	/// <summary>
 	/// 弾の移動処理
 	/// </summary>
-    public void MoveBall(Vector3 targetPosition,float ballSpeed)
+    public void MoveElectronicShocksBall(Vector3 targetPosition,float ballSpeed)
     {
-		// 敵の方向を計算
-		Vector3 targetDirection = targetPosition - _myTransform.position;
-
-		_myTransform.rotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+		// 弾を回転
+		_myTransform.rotation = RotationBall(targetPosition);
 
 		// 敵に向かって移動
 		_myTransform.position += _myTransform.forward * ballSpeed * Time.deltaTime;
     }
+
+	public void MoveElectricBall(float ballSpeed)
+    {
+		// 敵に向かって移動
+		_myTransform.position += _myTransform.forward * ballSpeed * Time.deltaTime;
+	}
+
+	/// <summary>
+	/// 弾回転処理
+	/// </summary>
+	/// <param name="targetPosition">敵の座標</param>
+	/// <returns>回転</returns>
+	public Quaternion RotationBall(Vector3 targetPosition)
+    {
+		// 敵の方向を計算
+		Vector3 targetDirection = targetPosition - _myTransform.position;
+
+		return Quaternion.LookRotation(targetDirection, Vector3.up);
+	}
+
 }

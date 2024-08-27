@@ -22,19 +22,19 @@ public class Ball : MonoBehaviour
 	#region フィールド変数
 
 	// 弾の速度
-	private float _ballSpeed = 0f;
+	protected float _ballSpeed = 0f;
 
-	private float _damage = 0f;	
+	protected float _damage = 0f;
 
-	private Transform _myTransform = default;
+	protected Transform _myTransform = default;
 
-	private Transform _targetTransform = default;
+	protected Transform _targetTransform = default;
 
-	private BallMove _ballMove = default;
+	protected BallMove _ballMove = default;
 
-	private CollisionManager _collisionManager = default;
+	protected CollisionManager _collisionManager = default;
 
-	private Character _shotCharacter = default;
+	protected Character _shotCharacter = default;
 
 	protected BallPool _ballPool = default;
 
@@ -68,7 +68,15 @@ public class Ball : MonoBehaviour
 	/// </summary>
 	private void Update()
 	{
-		_ballMove.MoveBall(_targetTransform.position,_ballSpeed);
+		UpdateBall();
+	}
+
+	/// <summary>
+	/// 弾更新処理
+	/// </summary>
+	protected virtual void UpdateBall()
+    {
+		_ballMove.MoveElectronicShocksBall(_targetTransform.position, _ballSpeed);
 
 		// 衝突した敵を取得
 		Transform targetCharacter = _collisionManager.CollisionTarget(
@@ -84,8 +92,13 @@ public class Ball : MonoBehaviour
 	public void SetParameter(Character shotCharacter, Transform targetTrasform,float damage,float ballSpeed)
 	{
 		_shotCharacter = shotCharacter;
-		_targetTransform = targetTrasform;
+		
 		_damage = damage;
 		_ballSpeed = ballSpeed;
+		if (targetTrasform != null)
+		{
+			_targetTransform = targetTrasform;
+			_ballMove.RotationBall(_targetTransform.position);
+		}
 	}
 }

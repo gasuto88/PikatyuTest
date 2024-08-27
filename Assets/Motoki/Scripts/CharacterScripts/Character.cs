@@ -32,6 +32,12 @@ public class Character : MonoBehaviour
     // 通常攻撃クールタイム
     protected float _normalAttackCoolTime = 0f;
 
+    // ロール時間
+    protected float _roleTime = 0f;
+
+    // ロールクールタイム
+    protected float _roleCoolTime = 0f;
+
     // 移動方向
     protected Vector3 _moveDirection = default;
 
@@ -53,6 +59,8 @@ public class Character : MonoBehaviour
     // 自身のTransform
     protected Transform _myTransform = default;
 
+    protected Transform _targetTransfrom = default;
+
     // 行動状態
     protected ActionState _actionState = default;
 
@@ -63,7 +71,7 @@ public class Character : MonoBehaviour
 
     protected AttackProcess _roleState = default;
 
-    protected RoleAttackProcess _roleAttackProcess = default;
+    protected RoleButtonState _roleButtonState = default;
 
     protected ISearch _iSearch = default;
 
@@ -198,9 +206,10 @@ public class Character : MonoBehaviour
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
                     else if (_userInput.IsRoleAttack
-                        && _roleAttackProcess != RoleAttackProcess.IDLE)
+                        && _roleButtonState == RoleButtonState.IDLE
+                        && !_isRoleAttack)
                     {
-                        _roleAttackProcess = RoleAttackProcess.SHORT;
+                        _roleButtonState = RoleButtonState.SHORT;
                     }
                     break;
                 }
@@ -211,9 +220,11 @@ public class Character : MonoBehaviour
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
-                    else if (_userInput.IsRoleAttack)
+                    else if (_userInput.IsRoleAttack
+                        && _roleButtonState == RoleButtonState.IDLE
+                        && !_isRoleAttack)
                     {
-                        _roleAttackProcess = RoleAttackProcess.SHORT;
+                        _roleButtonState = RoleButtonState.SHORT;
                     }
                     // 移動入力がなかったら
                     else if (moveInput == Vector2.zero)

@@ -16,4 +16,19 @@ public class ElectronicShocksBall : Ball
     {
         _ballPool = GameObject.FindGameObjectWithTag("BallPool").GetComponent<ElectronicShocksPool>();
     }
+
+    protected override void UpdateBall()
+    {
+        _ballMove.MoveElectronicShocksBall(_targetTransform.position,_ballSpeed);
+
+        // 衝突した敵を取得
+        Transform targetCharacter = _collisionManager.CollisionTarget(
+            _myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);
+
+        // 衝突したら弾をしまう
+        if (targetCharacter != null)
+        {
+            _ballPool.Close(this);
+        }
+    }
 }

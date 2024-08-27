@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffd9160123a26f74980ea69ce8a663c8, type: 3}
   m_Name: ElectricBallData
   m_EditorClassIdentifier: 
-  _roleAttackTime: 1
-  _roleAttackCoolTime: 5
-  _burstRadius: 1
-  _ballSpeed: 2
+  _roleAttackDistance: 5
+  _roleAttackTime: 0.3
+  _roleAttackCoolTime: 3
+  _burstRadius: 0.5
+  _ballSpeed: 5
+  _ballDamage: 5

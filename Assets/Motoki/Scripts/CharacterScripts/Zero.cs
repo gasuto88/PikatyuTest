@@ -39,6 +39,10 @@ public class Zero : Attack
         // 通常攻撃クールタイムを設定
         _normalAttackCoolTime = _normalAttackData.NormalAttackCoolTime;
 
+        _roleTime = _roleData.RoleAttackTime;
+
+        _roleCoolTime = _roleData.RoleAttackCoolTime;
+
         _longPressTime = _playerDataAsset.LongPressTime;
     }
 
@@ -57,6 +61,18 @@ public class Zero : Attack
                 _isNormalAttack = false;
             }
         }
+
+        if (_isRoleAttack)
+        {
+            _roleCoolTime -= Time.deltaTime;
+
+            if(_roleCoolTime <= 0f)
+            {
+                _roleCoolTime = _roleData.RoleAttackCoolTime;
+
+                _isRoleAttack = false;
+            }
+        }
     }
 
     protected override void NormalAttack()
@@ -69,24 +85,24 @@ public class Zero : Attack
                     _isNormalAttack = true;
 
                     // 敵を取得
-                    Transform targetTransform
+                    _targetTransfrom
                         = _iSearch.TargetSearch(_myTransform.position, _normalAttackData.NormalAttackDistance, LAYER_ENEMY);
 
                     // 敵が範囲に入ってたら
-                    if (targetTransform == null)
+                    if (_targetTransfrom == null)
                     {
                         _actionState = ActionState.IDLE;
                         return;
                     }
 
                     // 敵の方向を取得
-                    _moveDirection = targetTransform.position - _myTransform.position;
+                    _moveDirection = _targetTransfrom.position - _myTransform.position;
 
                     // 弾を取り出す
                     Ball ball = _electronicShocksPool.TakeOut(_myTransform.position, _playerQuaternion);
 
                     // 弾にパラメータを設定
-                    ball.SetParameter(this, targetTransform, _normalAttackData.BallDamage, _normalAttackData.BallSpeed);
+                    ball.SetParameter(this, _targetTransfrom, _normalAttackData.BallDamage, _normalAttackData.BallSpeed);
 
                     _normalAttackState = AttackProcess.EXECUTE;
 
@@ -124,37 +140,38 @@ public class Zero : Attack
 
     protected override void RoleAttack()
     {
+        Debug.Log("ロール攻撃");
         _moveDirection = _roleAttackDirection;
 
         _playerQuaternion = Quaternion.LookRotation(_moveDirection,Vector3.up);
 
-        switch (_normalAttackState)
+        switch (_roleState)
         {
             // 初期化
             case AttackProcess.INIT:
                 {
-                    _isNormalAttack = true;
+                    _isRoleAttack = true;
                 
                     // 弾を取り出す
-                    Ball ball = _electronicShocksPool.TakeOut(_myTransform.position, _playerQuaternion);
+                    Ball ball = _electricBallPool.TakeOut(_myTransform.position, _playerQuaternion);
 
                     // 弾にパラメータを設定
-                    //ball.SetParameter(this, targetTransform, _normalAttackData.BallDamage, _normalAttackData.BallSpeed);
+                    ball.SetParameter(this, _targetTransfrom, _roleData.BallDamage, _roleData.BallSpeed);
 
-                    _normalAttackState = AttackProcess.EXECUTE;
+                    _roleState = AttackProcess.EXECUTE;
 
                     break;
                 }
             // 実行
             case AttackProcess.EXECUTE:
                 {
-                    _normalAttackTime -= Time.deltaTime;
+                    _roleTime -= Time.deltaTime;
 
-                    if (_normalAttackTime <= 0f)
+                    if (_roleTime <= 0f)
                     {
-                        _normalAttackTime = _normalAttackData.NormalAttackTime;
+                        _roleTime = _roleData.RoleAttackTime;
 
-                        _normalAttackState = AttackProcess.EXIT;
+                        _roleState = AttackProcess.EXIT;
                     }
 
                     break;
@@ -162,7 +179,7 @@ public class Zero : Attack
             // 終了
             case AttackProcess.EXIT:
                 {
-                    _normalAttackState = AttackProcess.INIT;
+                    _roleState = AttackProcess.INIT;
 
                     _actionState = ActionState.IDLE;
 
@@ -176,33 +193,37 @@ public class Zero : Attack
     }
     protected override void ChangeRoleAttackDirection()
     {
-        switch (_roleAttackProcess)
+        Debug.Log(_roleButtonState);
+        switch (_roleButtonState)
         {
             // 短押し
-            case RoleAttackProcess.SHORT:
+            case RoleButtonState.SHORT:
                 {
                     // 敵を取得
-                    Transform targetTransform
+                    _targetTransfrom
                         = _iSearch.TargetSearch(_myTransform.position, _roleData.RoleAttackDistance, LAYER_ENEMY);
 
-                    if (targetTransform == null)
+                    if (_targetTransfrom == null)
                     {
                         _roleAttackDirection = _myTransform.forward;
                     }
                     else
                     {
                         // 敵の方向を取得
-                        _moveDirection = targetTransform.position - _myTransform.position;
+                        _moveDirection = _targetTransfrom.position - _myTransform.position;
                     }
 
                     if (_userInput.IsCancel)
                     {
-                        _roleAttackProcess = RoleAttackProcess.IDLE;
+                        _roleButtonState = RoleButtonState.IDLE;
+                        _longPressTime = _playerDataAsset.LongPressTime;
                         return;
                     }
                     else if (!_userInput.IsRoleAttack)
                     {
+                        _roleButtonState = RoleButtonState.IDLE;
                         _actionState = ActionState.ROLE_ATTACK;
+                        _longPressTime = _playerDataAsset.LongPressTime;
                         return;
                     }
                     _longPressTime -= Time.deltaTime;
@@ -211,13 +232,13 @@ public class Zero : Attack
                     {
                         _longPressTime = _playerDataAsset.LongPressTime;
 
-                        _roleAttackProcess = RoleAttackProcess.LONG;
+                        _roleButtonState = RoleButtonState.LONG;
                     }
 
                     break;
                 }
             // 長押し
-            case RoleAttackProcess.LONG:
+            case RoleButtonState.LONG:
                 {
                     Vector3 attackDirectionInput = _userInput.AttackDirectionInput;
 
@@ -227,11 +248,14 @@ public class Zero : Attack
 
                     if (_userInput.IsCancel)
                     {
-                        _roleAttackProcess = RoleAttackProcess.IDLE;
+                        _roleButtonState = RoleButtonState.IDLE;
+                        _longPressTime = _playerDataAsset.LongPressTime;
                     }
                     else if (!_userInput.IsRoleAttack)
                     {
+                        _roleButtonState = RoleButtonState.IDLE;
                         _actionState = ActionState.ROLE_ATTACK;
+                        _longPressTime = _playerDataAsset.LongPressTime;
                     }
 
                     break;
