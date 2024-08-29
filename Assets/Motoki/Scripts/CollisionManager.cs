@@ -33,4 +33,18 @@ public class CollisionManager : MonoBehaviour
 
 		return null;
     }
+
+	/// <summary>
+	/// バースト内にいる敵を取得する処理
+	/// </summary>
+	/// <param name="center">中心座標</param>
+	/// <param name="radius">半径</param>
+	/// <param name="layerName">レイヤーの名前</param>
+	/// <returns></returns>
+	public Collider[] TargetInBurst(Vector3 center,float radius,string layerName)
+    {
+		Collider[] targetColliders = Physics.OverlapSphere(center,radius,LayerMask.GetMask(layerName));
+
+		return targetColliders;
+    }
 }

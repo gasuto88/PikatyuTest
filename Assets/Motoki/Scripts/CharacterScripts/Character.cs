@@ -75,11 +75,20 @@ public class Character : MonoBehaviour
 
     protected ISearch _iSearch = default;
 
+    // 通常攻撃判定
     protected bool _isNormalAttack = false;
 
+    // ロール攻撃判定
     protected bool _isRoleAttack = false;
 
-    protected float _longPressTime = 0f;
+    // ロールキャンセル判定
+    protected bool _isRoleCancel = false;
+
+    // ロール長押し時間
+    protected float _roleLongPressTime = 0f;
+
+　　// ロールキャンセルクールタイム
+    protected float _roleCancelCoolTime = 0f;
 
     #endregion
 
@@ -173,14 +182,13 @@ public class Character : MonoBehaviour
                 }
         }
 
-        // 回転を計算
-        _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerDataAsset.RotationSpeed);
-
+        if (_moveDirection != Vector3.zero)
+        {
+            // 回転を計算
+            _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerDataAsset.RotationSpeed);
+        }
         // 回転角度を設定
         _myTransform.rotation = _playerQuaternion;
-
-        // 移動を設定
-        //_myTransform.position = _playerPosition;
     }
 
     /// <summary>
@@ -188,9 +196,9 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="moveInput">移動入力</param>
     private void ActionStateMachine(Vector2 moveInput)
-    {
+    {      
         ChangeRoleAttackDirection();
-
+        
         switch (_actionState)
         {
             case ActionState.IDLE:

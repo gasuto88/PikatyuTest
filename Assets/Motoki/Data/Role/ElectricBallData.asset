@@ -15,6 +15,9 @@ MonoBehaviour:
   _roleAttackDistance: 5
   _roleAttackTime: 0.3
   _roleAttackCoolTime: 3
-  _burstRadius: 0.5
+  _burstRadius: 1
+  _burstDamage: 30
   _ballSpeed: 5
   _ballDamage: 5
+  _longPressTime: 0.3
+  _cancelCoolTime: 0.5

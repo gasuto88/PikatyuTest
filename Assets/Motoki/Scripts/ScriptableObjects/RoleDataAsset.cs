@@ -22,11 +22,14 @@ public class RoleDataAsset : ScriptableObject
 	[SerializeField, Header("ロール時間"), Min(0f)]
 	protected float _roleAttackTime = 1f;
 
-	[SerializeField, Header("ロールクールタイム")]
+	[SerializeField, Header("ロールクールタイム"), Min(0f)]
 	protected float _roleAttackCoolTime = 5f;
 
-	[SerializeField, Header("バーストの半径")]
+	[SerializeField, Header("バーストの半径"), Min(0f)]
 	protected float _burstRadius = 1f;
+
+	[SerializeField,Header("バーストダメージ"), Min(0f)]
+	protected float _burstDamage = 30f;
 
 	#endregion
 
@@ -39,6 +42,8 @@ public class RoleDataAsset : ScriptableObject
 	public float RoleAttackCoolTime { get => _roleAttackCoolTime; set => _roleAttackCoolTime = value; }
 
 	public float BurstRadius { get => _burstRadius; set => _burstRadius = value; }
+
+	public float BurstDamage { get => _burstDamage; set => _burstDamage = value; }
 
 	#endregion
 }

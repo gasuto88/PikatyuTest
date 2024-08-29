@@ -43,12 +43,16 @@ public class Zero : Attack
 
         _roleCoolTime = _roleData.RoleAttackCoolTime;
 
-        _longPressTime = _playerDataAsset.LongPressTime;
+        _roleLongPressTime = _roleData.LongPressTime;
+
+        _roleCancelCoolTime = _roleData.CancelCoolTime;
     }
 
     protected override void UpdateCharacter()
     {
         base.UpdateCharacter();
+
+        Debug.Log(_isRoleCancel);
 
         if (_isNormalAttack)
         {
@@ -66,11 +70,23 @@ public class Zero : Attack
         {
             _roleCoolTime -= Time.deltaTime;
 
-            if(_roleCoolTime <= 0f)
+            if (_roleCoolTime <= 0f)
             {
                 _roleCoolTime = _roleData.RoleAttackCoolTime;
 
                 _isRoleAttack = false;
+            }
+        }
+
+        if (_isRoleCancel)
+        {
+            _roleCancelCoolTime -= Time.deltaTime;
+
+            if (_roleCancelCoolTime <= 0f)
+            {
+                _roleCancelCoolTime = _roleData.CancelCoolTime;
+
+                _isRoleCancel = false;
             }
         }
     }
@@ -140,23 +156,27 @@ public class Zero : Attack
 
     protected override void RoleAttack()
     {
-        Debug.Log("ロール攻撃");
+        //Debug.Log("ロール攻撃");
         _moveDirection = _roleAttackDirection;
 
-        _playerQuaternion = Quaternion.LookRotation(_moveDirection,Vector3.up);
-
+        if (_moveDirection != Vector3.zero)
+        {
+            _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
+        }
         switch (_roleState)
         {
             // 初期化
             case AttackProcess.INIT:
                 {
                     _isRoleAttack = true;
-                
+
                     // 弾を取り出す
                     Ball ball = _electricBallPool.TakeOut(_myTransform.position, _playerQuaternion);
 
                     // 弾にパラメータを設定
                     ball.SetParameter(this, _targetTransfrom, _roleData.BallDamage, _roleData.BallSpeed);
+
+                    ball.SetBurstInfo(_roleData.BurstDamage, _roleData.BurstRadius);
 
                     _roleState = AttackProcess.EXECUTE;
 
@@ -193,12 +213,16 @@ public class Zero : Attack
     }
     protected override void ChangeRoleAttackDirection()
     {
-        Debug.Log(_roleButtonState);
         switch (_roleButtonState)
         {
             // 短押し
             case RoleButtonState.SHORT:
                 {
+                    if (_isRoleCancel)
+                    {
+                        _roleButtonState = RoleButtonState.IDLE;
+                        return;
+                    }
                     // 敵を取得
                     _targetTransfrom
                         = _iSearch.TargetSearch(_myTransform.position, _roleData.RoleAttackDistance, LAYER_ENEMY);
@@ -215,22 +239,23 @@ public class Zero : Attack
 
                     if (_userInput.IsCancel)
                     {
+                        _isRoleCancel = true;
                         _roleButtonState = RoleButtonState.IDLE;
-                        _longPressTime = _playerDataAsset.LongPressTime;
+                        _roleLongPressTime = _roleData.LongPressTime;
                         return;
                     }
                     else if (!_userInput.IsRoleAttack)
                     {
                         _roleButtonState = RoleButtonState.IDLE;
                         _actionState = ActionState.ROLE_ATTACK;
-                        _longPressTime = _playerDataAsset.LongPressTime;
+                        _roleLongPressTime = _roleData.LongPressTime;
                         return;
                     }
-                    _longPressTime -= Time.deltaTime;
+                    _roleLongPressTime -= Time.deltaTime;
 
-                    if (_longPressTime <= 0f)
+                    if (_roleLongPressTime <= 0f)
                     {
-                        _longPressTime = _playerDataAsset.LongPressTime;
+                        _roleLongPressTime = _roleData.LongPressTime;
 
                         _roleButtonState = RoleButtonState.LONG;
                     }
@@ -248,14 +273,15 @@ public class Zero : Attack
 
                     if (_userInput.IsCancel)
                     {
+                        _isRoleCancel = true;
                         _roleButtonState = RoleButtonState.IDLE;
-                        _longPressTime = _playerDataAsset.LongPressTime;
+                        _roleLongPressTime = _roleData.LongPressTime;
                     }
                     else if (!_userInput.IsRoleAttack)
                     {
                         _roleButtonState = RoleButtonState.IDLE;
                         _actionState = ActionState.ROLE_ATTACK;
-                        _longPressTime = _playerDataAsset.LongPressTime;
+                        _roleLongPressTime = _roleData.LongPressTime;
                     }
 
                     break;

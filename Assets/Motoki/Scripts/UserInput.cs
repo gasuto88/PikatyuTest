@@ -154,7 +154,7 @@ public class UserInput : MonoBehaviour
         _playerInput.actions[_userInputDataAsset.HoldTriggerName].canceled += OnHoldTriggerUp;
 
         _playerInput.actions[_userInputDataAsset.CancelName].started += OnCancelDown;
-        _playerInput.actions[_userInputDataAsset.CancelName].started += OnCancelUp;
+        _playerInput.actions[_userInputDataAsset.CancelName].canceled += OnCancelUp;
     }
 
     /// <summary>
@@ -178,7 +178,7 @@ public class UserInput : MonoBehaviour
     private void OnNormalAttackDown(InputAction.CallbackContext context)
     {
         // 通常攻撃判定を取得
-        _isNormalAttack = context.ReadValueAsButton();
+        _isNormalAttack = true;
     }
 
     /// <summary>
@@ -195,8 +195,8 @@ public class UserInput : MonoBehaviour
     /// </summary>
     /// <param name="context">入力情報</param>
     private void OnRoleAttackDown(InputAction.CallbackContext context)
-    {
-        _isRoleAttack = context.ReadValueAsButton();
+    {       
+        _isRoleAttack = true;
     }
 
     private void OnRoleAttackUp(InputAction.CallbackContext context)
@@ -210,7 +210,7 @@ public class UserInput : MonoBehaviour
     /// <param name="context">入力情報</param>
     private void OnResurrectionDown(InputAction.CallbackContext context)
     {
-        _isResurrection = context.ReadValueAsButton();
+        _isResurrection = true;
     }
 
     /// <summary>
@@ -228,7 +228,7 @@ public class UserInput : MonoBehaviour
     /// <param name="context">入力情報</param>
     private void OnHoldTriggerDown(InputAction.CallbackContext context)
     {
-        _isHoldTrigger = context.ReadValueAsButton();
+        _isHoldTrigger = true;
     }
 
     /// <summary>
@@ -242,11 +242,11 @@ public class UserInput : MonoBehaviour
 
     private void OnCancelDown(InputAction.CallbackContext context)
     {
-
+        _isCancel = true;
     }
 
     private void OnCancelUp(InputAction.CallbackContext context)
     {
-
+        _isCancel = false;
     }
 }

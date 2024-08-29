@@ -26,6 +26,10 @@ public class Ball : MonoBehaviour
 
 	protected float _damage = 0f;
 
+	protected float _burstRadius = 0f;
+
+	protected float _burstDamage = 0f;
+
 	protected Transform _myTransform = default;
 
 	protected Transform _targetTransform = default;
@@ -76,17 +80,7 @@ public class Ball : MonoBehaviour
 	/// </summary>
 	protected virtual void UpdateBall()
     {
-		_ballMove.MoveElectronicShocksBall(_targetTransform.position, _ballSpeed);
-
-		// 衝突した敵を取得
-		Transform targetCharacter = _collisionManager.CollisionTarget(
-			_myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);
-
-		// 衝突したら弾をしまう
-		if (targetCharacter != null)
-		{
-			_ballPool.Close(this);
-		}
+		
 	}
 
 	public void SetParameter(Character shotCharacter, Transform targetTrasform,float damage,float ballSpeed)
@@ -101,4 +95,11 @@ public class Ball : MonoBehaviour
 			_ballMove.RotationBall(_targetTransform.position);
 		}
 	}
+
+	public void SetBurstInfo(float damage,float radius)
+    {
+		_burstDamage = damage;
+
+		_burstRadius = radius;
+    }
 }

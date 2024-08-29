@@ -34,39 +34,39 @@
                 },
                 {
                     "name": "RoleAttack",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "a8b38bf3-a51a-488f-be3b-d106f3f1ec9f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Resurrection",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "65e5197e-4b6c-43fb-aac8-dc92340873d0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "HoldTrigger",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "0338755e-d622-40c6-97b0-92bbb658e165",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Cancel",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "8e177331-2dd7-449f-9dbe-0830c3a799fc",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -163,7 +163,7 @@
                     "id": "aac630de-9eb1-4986-9020-a932f2572edf",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "AxisDeadzone(min=1.401298E-45,max=0.5)",
                     "groups": "Gamepad",
                     "action": "RoleAttack",
                     "isComposite": false,

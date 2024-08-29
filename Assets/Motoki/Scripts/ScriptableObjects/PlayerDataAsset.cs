@@ -40,9 +40,6 @@ public class PlayerDataAsset : ScriptableObject
 	[SerializeField, Header("ホールド判定距離"), Min(0f)]
 	private float _holdDistance = 1f;
 
-	[SerializeField,Header("長押し時間"),Min(0f)]
-	private float _longPressTime = 0f;
-
 	#endregion
 
 	#region プロパティ
@@ -60,8 +57,6 @@ public class PlayerDataAsset : ScriptableObject
 	public float ShotPower { get => _shotSpeed; set => _shotSpeed = value; }
 
 	public float HoldDistance { get => _holdDistance; set => _holdDistance = value; }
-
-	public float LongPressTime { get => _longPressTime; set => _longPressTime = value; }
 
 	#endregion
 }
