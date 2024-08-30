@@ -73,6 +73,9 @@ public class Character : MonoBehaviour
 
     protected RoleButtonState _roleButtonState = default;
 
+    // 掴みステート
+    protected HoldState _holdState = default;
+
     protected ISearch _iSearch = default;
 
     // 通常攻撃判定
@@ -142,6 +145,8 @@ public class Character : MonoBehaviour
         Vector2 moveInput = _userInput.MoveInput;
 
         ActionStateMachine(moveInput);
+
+        Hold();
 
         switch (_actionState)
         {
@@ -283,6 +288,21 @@ public class Character : MonoBehaviour
     protected virtual void RoleAttack()
     {
 
+    }
+
+    private void Hold()
+    {
+        switch (_holdState)
+        {
+            case HoldState.IDLE:
+                break;
+            case HoldState.HOLD:
+                break;
+            case HoldState.TRIGGER:
+                break;
+            default:
+                break;
+        }
     }
 
     protected virtual void ChangeRoleAttackDirection()
