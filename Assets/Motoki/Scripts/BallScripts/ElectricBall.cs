@@ -15,6 +15,7 @@ public class ElectricBall : Ball
     protected override void Init()
     {
         _ballPool = GameObject.FindGameObjectWithTag("BallPool").GetComponent<ElectricBallPool>();
+
     }
 
     protected override void UpdateBall()
@@ -23,7 +24,7 @@ public class ElectricBall : Ball
 
 		// 衝突した敵を取得
 		Transform targetCharacter = _collisionManager.CollisionTarget(
-			_myTransform.position, _myTransform.localScale, _myTransform.rotation, LAYER_ENEMY);
+			_myTransform.position, _myTransform.localScale, _myTransform.rotation, _layerNames);
 
 		// 衝突したら弾をしまう
 		if (targetCharacter == null)

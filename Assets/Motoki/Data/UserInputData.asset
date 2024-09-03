@@ -13,4 +13,3 @@ MonoBehaviour:
   m_Name: UserInputData
   m_EditorClassIdentifier: 
   _inputDeadZoon: 0.1
-  _moveActionName: Move

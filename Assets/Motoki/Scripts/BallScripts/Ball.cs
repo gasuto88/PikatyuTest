@@ -30,6 +30,8 @@ public class Ball : MonoBehaviour
 
 	protected float _burstDamage = 0f;
 
+	protected string[] _layerNames = new string[1];
+
 	protected Transform _myTransform = default;
 
 	protected Transform _targetTransform = default;
@@ -50,6 +52,8 @@ public class Ball : MonoBehaviour
 	private void Awake () 
 	{
 		_myTransform = transform;
+
+		_layerNames[0] = LAYER_ENEMY;
 
 		// Script取得
 		_ballMove = GetComponent<BallMove>();

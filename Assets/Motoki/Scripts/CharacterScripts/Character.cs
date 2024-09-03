@@ -16,15 +16,20 @@ using UnityEditor;
 /// キャラクタークラス
 /// </summary>
 [System.Serializable]
-public class Character : MonoBehaviour
+public class Character : MonoBehaviour, IHoldable,IHoldChange
 {
     // レイヤーの名前
+    protected const string LAYER_PLAYER = "Player";
     protected const string LAYER_ENEMY = "Enemy";
+    protected const string LAYER_ITEM = "Item";
 
     #region フィールド変数
 
     [SerializeField, Header("プレイヤーデータ")]
-    protected PlayerDataAsset _playerDataAsset = default;
+    protected PlayerDataAsset _playerData = default;
+
+    [SerializeField,Header("ホールドの当たり判定")]
+    protected Vector3 _holdsize = default;
 
     // 通常攻撃時間
     protected float _normalAttackTime = 0f;
@@ -90,7 +95,7 @@ public class Character : MonoBehaviour
     // ロール長押し時間
     protected float _roleLongPressTime = 0f;
 
-　　// ロールキャンセルクールタイム
+    // ロールキャンセルクールタイム
     protected float _roleCancelCoolTime = 0f;
 
     #endregion
@@ -142,11 +147,14 @@ public class Character : MonoBehaviour
     protected virtual void UpdateCharacter()
     {
         // 移動の入力を取得
-        Vector2 moveInput = _userInput.MoveInput;
+        Vector2 moveInput = _userInput.LeftStickInput;
+
+        // ホールド入力を取得
+        bool isHoldInput = _userInput.IsButtonNorth;
 
         ActionStateMachine(moveInput);
 
-        Hold();
+        Hold(isHoldInput);
 
         switch (_actionState)
         {
@@ -176,6 +184,16 @@ public class Character : MonoBehaviour
 
                     break;
                 }
+            // つかまれ状態
+            case ActionState.HELD:
+                {
+                    break;
+                }
+            // ふっ飛ばされ状態
+            case ActionState.SHOT:
+                {
+                    break;
+                }
             // 蘇生
             case ActionState.RESURRECTION:
                 {
@@ -190,7 +208,7 @@ public class Character : MonoBehaviour
         if (_moveDirection != Vector3.zero)
         {
             // 回転を計算
-            _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerDataAsset.RotationSpeed);
+            _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerData.RotationSpeed);
         }
         // 回転角度を設定
         _myTransform.rotation = _playerQuaternion;
@@ -201,9 +219,9 @@ public class Character : MonoBehaviour
     /// </summary>
     /// <param name="moveInput">移動入力</param>
     private void ActionStateMachine(Vector2 moveInput)
-    {      
+    {
         ChangeRoleAttackDirection();
-        
+
         switch (_actionState)
         {
             case ActionState.IDLE:
@@ -213,12 +231,12 @@ public class Character : MonoBehaviour
                     {
                         _actionState = ActionState.MOVE;
                     }
-                    else if (_userInput.IsNormalAttack
+                    else if (_userInput.IsButtonEast
                         && !_isNormalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
-                    else if (_userInput.IsRoleAttack
+                    else if (_userInput.IsLeftTrigger
                         && _roleButtonState == RoleButtonState.IDLE
                         && !_isRoleAttack)
                     {
@@ -228,12 +246,12 @@ public class Character : MonoBehaviour
                 }
             case ActionState.MOVE:
                 {
-                    if (_userInput.IsNormalAttack
+                    if (_userInput.IsButtonEast
                         && !_isNormalAttack)
                     {
                         _actionState = ActionState.NORMAL_ATTACK;
                     }
-                    else if (_userInput.IsRoleAttack
+                    else if (_userInput.IsLeftTrigger
                         && _roleButtonState == RoleButtonState.IDLE
                         && !_isRoleAttack)
                     {
@@ -272,7 +290,7 @@ public class Character : MonoBehaviour
         _moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
 
         // 移動量を加算
-        _rigidbody.velocity = _moveCalculator.CalculationMove(_moveDirection, _playerDataAsset.MoveSpeed);
+        _rigidbody.velocity = _moveCalculator.CalculationMove(_moveDirection, _playerData.MoveSpeed);
     }
 
     /// <summary>
@@ -290,24 +308,107 @@ public class Character : MonoBehaviour
 
     }
 
-    private void Hold()
+    /// <summary>
+    /// ホールド処理
+    /// </summary>
+    /// <param name="isHoldInput"></param>
+    private void Hold(bool isHoldInput)
     {
         switch (_holdState)
         {
             case HoldState.IDLE:
-                break;
+                {
+                    if (isHoldInput
+                        && (_actionState == ActionState.IDLE || _actionState == ActionState.MOVE))
+                    {
+                        // 当たり判定の大きさ
+                                                
+                        // つかめるものがないかチェック
+                        Transform holdTarget = _collisionManager.SerachHoldObject(
+                            _myTransform.position,_holdsize , _myTransform.rotation, _playerData.HoldObjects, _myTransform);
+                        Debug.Log(holdTarget);
+                        
+                        if (holdTarget == null)
+                        {
+                            return;
+                        }
+                        
+                        switch (holdTarget.tag)
+                        {
+                            // プレイヤー
+                            case LAYER_PLAYER:
+                                {
+                                    // 親子
+                                    
+                                    
+
+                                    if(holdTarget.TryGetComponent<IHoldChange>(out IHoldChange iholdChange))
+                                    {
+                                        iholdChange.ChangeHoldState();
+                                    }
+
+                                    break;
+                                }
+                            // 敵
+                            case LAYER_ENEMY:
+                                {
+                                    break;
+                                }
+                            // アイテム
+                            case LAYER_ITEM:
+                                {
+                                    break;
+                                }
+                            default:
+                                {
+                                    break;
+                                }
+
+                        }
+
+
+                    }
+
+                    break;
+                }
             case HoldState.HOLD:
-                break;
+                {
+                    if (isHoldInput)
+                    {
+
+                    }
+                    break;
+                }
             case HoldState.TRIGGER:
-                break;
+                {
+                    break;
+                }
             default:
-                break;
+                {
+                    break;
+                }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(_myTransform.position , _holdsize);
     }
 
     protected virtual void ChangeRoleAttackDirection()
     {
-        
+
+    }
+
+    public bool CanHold()
+    {
+        return true;
+    }
+
+    public void ChangeHoldState()
+    {
+        _actionState = ActionState.HELD;
     }
 
 }

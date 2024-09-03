@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// ユーザー入力データクラス
@@ -22,29 +23,25 @@ public class UserInputDataAsset : ScriptableObject
 	[SerializeField,Header("入力デッドゾーン"),Min(0f)]
 	private float _inputDeadZoon = 0.3f;
 
-    [Space(10)]
-    [Header("【アクション名】")]
+    private string _leftStickName = "LeftStick";
 
-    [SerializeField, Header("移動名")]
-    private string _moveActionName = "Move";
+    private string _rightStickName = "RightStick"; 
 
-    [SerializeField, Header("攻撃方向名")]
-    private string _attackDirectionName = "AttackDirection";
+    private string _leftTriggerName = "LeftTrigger";
 
-    [SerializeField, Header("通常攻撃名")]
-    private string _normalAttackName = "NormalAttack";
+    private string _rightTriggerName = "RightTrigger"; 
 
-    [SerializeField, Header("ロール攻撃名")]
-    private string _roleAttackName = "RoleAttack";
+    private string _leftButtonName = "LeftButton";
 
-    [SerializeField, Header("蘇生名")]
-    private string _resurrectionName = "Resurrection";
+    private string _rightButtonName = "RightButton";
 
-    [SerializeField,Header("掴み/投げ名")]
-    private string _holdTriggerName = "HoldTrigger";
+    private string _buttonEastName = "ButtonEast";
 
-    [SerializeField, Header("キャンセル名")]
-    private string _cancelName = "Cancel";
+    private string _buttonWestName = "ButtonWest";
+
+    private string _buttonNorthName = "ButtonNorth";
+
+    private string _buttonSouthName = "ButtonSouth";
 
     #endregion
 
@@ -52,19 +49,25 @@ public class UserInputDataAsset : ScriptableObject
 
     public float InputDeadZoon { get => _inputDeadZoon; set => _inputDeadZoon = value; }
 
-    public string MoveActionName { get => _moveActionName; set => _moveActionName = value; }
+    public string LeftStickName { get => _leftStickName; set => _leftStickName = value; }
 
-    public string AttackDirectionName { get => _attackDirectionName; set => _attackDirectionName = value; }
+    public string RightStickName { get => _rightStickName; set => _rightStickName = value; }
 
-    public string NormalAttackName { get => _normalAttackName; set => _normalAttackName = value; }
+    public string LeftTriggerName { get => _leftTriggerName; set => _leftTriggerName = value; }
 
-    public string RoleAttackName { get => _roleAttackName; set => _roleAttackName = value; }
+    public string RightTriggerName { get => _rightTriggerName; set => _rightTriggerName = value; }
 
-    public string ResurrectionName { get => _resurrectionName; set => _resurrectionName = value; }
+    public string LeftButtonName { get => _leftButtonName; set => _leftButtonName = value; }
 
-    public string HoldTriggerName { get => _holdTriggerName; set => _holdTriggerName = value; }
+    public string RightButtonName { get => _rightButtonName; set => _rightButtonName = value; }
 
-    public string CancelName { get => _cancelName; set => _cancelName = value; }
+    public string ButtonEastName { get => _buttonEastName; set => _buttonEastName = value; }
+
+    public string ButtonWestName { get => _buttonWestName; set => _buttonWestName = value; }
+
+    public string ButtonNorthName { get => _buttonNorthName; set => _buttonNorthName = value; }
+
+    public string ButtonSouthName { get => _buttonSouthName; set => _buttonSouthName = value; }
 
     #endregion
 

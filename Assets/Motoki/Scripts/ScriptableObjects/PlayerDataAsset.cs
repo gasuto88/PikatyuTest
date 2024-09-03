@@ -40,6 +40,9 @@ public class PlayerDataAsset : ScriptableObject
 	[SerializeField, Header("ホールド判定距離"), Min(0f)]
 	private float _holdDistance = 1f;
 
+	[SerializeField,Header("つかめる対象")]
+	private string[] _holdObjects = default;
+
 	#endregion
 
 	#region プロパティ
@@ -57,6 +60,8 @@ public class PlayerDataAsset : ScriptableObject
 	public float ShotPower { get => _shotSpeed; set => _shotSpeed = value; }
 
 	public float HoldDistance { get => _holdDistance; set => _holdDistance = value; }
+
+	public string[] HoldObjects { get => _holdObjects; set => _holdObjects = value; }
 
 	#endregion
 }

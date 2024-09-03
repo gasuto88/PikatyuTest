@@ -13,6 +13,7 @@ public enum ActionState
     MOVE,
     NORMAL_ATTACK,
     ROLE_ATTACK,
+    HELD,
     SHOT,
     RESURRECTION
 }

@@ -7,6 +7,7 @@
 -------------------------------------------------*/
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.iOS;
 
 /// <summary>
 /// ユーザー入力クラス
@@ -18,24 +19,19 @@ public class UserInput : MonoBehaviour
     [SerializeField, Header("ユーザー入力データ")]
     private UserInputDataAsset _userInputDataAsset = default;
 
-    private Vector2 _moveInput = default;
+    private Vector2 _leftStickInput = default;
+    private Vector2 _rightStickInput = default;
 
-    private Vector2 _attackDirectionInput = default;
+    private bool _isLeftTrigger = default;
+    private bool _isRightTrigger = false;
 
-    // 通常攻撃判定
-    private bool _isNormalAttack = false;
+    private bool _isLeftButton = false;
+    private bool _isRightButton = false;
 
-    // ロール攻撃判定
-    private bool _isRoleAttack = false;
-
-    // 蘇生判定
-    private bool _isResurrection = false;
-
-    // 掴み/投げ判定
-    private bool _isHoldTrigger = false;
-
-    // キャンセル判定
-    private bool _isCancel = false;
+    private bool _isButtonEast = false;
+    private bool _isButtonWest = false;
+    private bool _isButtonNorth = false;
+    private bool _isButtonSouth = false;
 
     private PlayerInput _playerInput = default;
 
@@ -43,84 +39,105 @@ public class UserInput : MonoBehaviour
 
     #region プロパティ
 
-    public Vector2 MoveInput
+    public Vector2 LeftStickInput
     {
         get
         {
             // 入力デッドゾーン
-            if (-_userInputDataAsset.InputDeadZoon <= _moveInput.x
-                && _moveInput.x <= _userInputDataAsset.InputDeadZoon)
+            if (-_userInputDataAsset.InputDeadZoon <= _leftStickInput.x
+                && _leftStickInput.x <= _userInputDataAsset.InputDeadZoon)
             {
-                _moveInput.x = 0f;
+                _leftStickInput.x = 0f;
             }
-            if (-_userInputDataAsset.InputDeadZoon <= _moveInput.y
-                && _moveInput.y <= _userInputDataAsset.InputDeadZoon)
+            if (-_userInputDataAsset.InputDeadZoon <= _leftStickInput.y
+                && _leftStickInput.y <= _userInputDataAsset.InputDeadZoon)
             {
-                _moveInput.y = 0f;
+                _leftStickInput.y = 0f;
             }
-            return _moveInput;
+            return _leftStickInput;
         }
     }
 
-    public Vector2 AttackDirectionInput
+    public Vector2 RightStickInput
     {
         get
         {
             // 入力デッドゾーン
-            if (-_userInputDataAsset.InputDeadZoon <= _attackDirectionInput.x
-                && _attackDirectionInput.x <= _userInputDataAsset.InputDeadZoon)
+            if (-_userInputDataAsset.InputDeadZoon <= _rightStickInput.x
+                && _rightStickInput.x <= _userInputDataAsset.InputDeadZoon)
             {
-                _attackDirectionInput.x = 0f;
+                _rightStickInput.x = 0f;
             }
-            if (-_userInputDataAsset.InputDeadZoon <= _attackDirectionInput.y
-                && _attackDirectionInput.y <= _userInputDataAsset.InputDeadZoon)
+            if (-_userInputDataAsset.InputDeadZoon <= _rightStickInput.y
+                && _rightStickInput.y <= _userInputDataAsset.InputDeadZoon)
             {
-                _attackDirectionInput.y = 0f;
+                _rightStickInput.y = 0f;
             }
-            return _attackDirectionInput;
+            return _rightStickInput;
         }
     }
 
-    /// <summary>
-    /// 攻撃判定
-    /// </summary>
-    public bool IsNormalAttack
+    public bool IsLeftTrigger
     {
         get
         {
-            return _isNormalAttack;
+            return _isLeftTrigger;
         }
     }
 
-    public bool IsRoleAttack
+    public bool IsRightTrigger
     {
         get
         {
-            return _isRoleAttack;
+            return _isRightTrigger;
         }
     }
 
-    public bool IsResurrection
+    public bool IsLeftButton
     {
         get
         {
-            return _isResurrection;
+            return _isLeftButton;
         }
     }
 
-    public bool IsHoldTrigger
+    public bool IsRightButton
     {
         get
         {
-            return _isHoldTrigger;
+            return _isRightButton;
         }
     }
 
-    public bool IsCancel
+    public bool IsButtonEast
     {
         get
         {
-            return _isCancel;
+            return _isButtonEast;
+        }
+    }
+
+    public bool IsButtonWest
+    {
+        get
+        {
+            return _isButtonWest;
+        }
+    }
+
+    public bool IsButtonNorth
+    {
+        get
+        {
+            return _isButtonNorth;
+        }
+    }
+
+    public bool IsButtonSouth
+    {
+        get
+        {
+            return _isButtonSouth;
         }
     }
 
@@ -135,118 +152,125 @@ public class UserInput : MonoBehaviour
         // Script取得
         _playerInput = GetComponent<PlayerInput>();
 
-        _playerInput.actions[_userInputDataAsset.MoveActionName].performed += OnMove;
-        _playerInput.actions[_userInputDataAsset.MoveActionName].canceled += OnMove;
+        _playerInput.actions[_userInputDataAsset.LeftStickName].performed += OnLeftStick;
+        _playerInput.actions[_userInputDataAsset.LeftStickName].canceled += OnLeftStick;
 
-        _playerInput.actions[_userInputDataAsset.AttackDirectionName].performed += OnAttackDirection;
-        _playerInput.actions[_userInputDataAsset.AttackDirectionName].canceled += OnAttackDirection;
+        _playerInput.actions[_userInputDataAsset.RightStickName].performed += OnRightStick;
+        _playerInput.actions[_userInputDataAsset.RightStickName].canceled += OnRightStick;
 
-        _playerInput.actions[_userInputDataAsset.NormalAttackName].started += OnNormalAttackDown;
-        _playerInput.actions[_userInputDataAsset.NormalAttackName].canceled += OnNormalAttackUp;
+        _playerInput.actions[_userInputDataAsset.LeftTriggerName].started += OnLeftTriggerDown;
+        _playerInput.actions[_userInputDataAsset.LeftTriggerName].canceled += OnLeftTriggerUp;
 
-        _playerInput.actions[_userInputDataAsset.RoleAttackName].started += OnRoleAttackDown;
-        _playerInput.actions[_userInputDataAsset.RoleAttackName].canceled += OnRoleAttackUp;
+        _playerInput.actions[_userInputDataAsset.RightTriggerName].started += OnRightTriggerDown;
+        _playerInput.actions[_userInputDataAsset.RightTriggerName].canceled += OnRightTriggerUp;
 
-        _playerInput.actions[_userInputDataAsset.ResurrectionName].started += OnResurrectionDown;
-        _playerInput.actions[_userInputDataAsset.ResurrectionName].canceled += OnResurrectionUp;
+        _playerInput.actions[_userInputDataAsset.LeftButtonName].started += OnLeftButtonDown;
+        _playerInput.actions[_userInputDataAsset.LeftButtonName].canceled += OnLeftButtonUp;
 
-        _playerInput.actions[_userInputDataAsset.HoldTriggerName].started += OnHoldTriggerDown;
-        _playerInput.actions[_userInputDataAsset.HoldTriggerName].canceled += OnHoldTriggerUp;
+        _playerInput.actions[_userInputDataAsset.RightButtonName].started += OnRightButtonDown;
+        _playerInput.actions[_userInputDataAsset.RightButtonName].canceled += OnRightButtonUp;
 
-        _playerInput.actions[_userInputDataAsset.CancelName].started += OnCancelDown;
-        _playerInput.actions[_userInputDataAsset.CancelName].canceled += OnCancelUp;
+        _playerInput.actions[_userInputDataAsset.ButtonEastName].started += OnButtonEastDown;
+        _playerInput.actions[_userInputDataAsset.ButtonEastName].canceled += OnButtonEastUp;
+
+        _playerInput.actions[_userInputDataAsset.ButtonWestName].started += OnButtonWestDown;
+        _playerInput.actions[_userInputDataAsset.ButtonWestName].canceled += OnButtonWestUp;
+
+        _playerInput.actions[_userInputDataAsset.ButtonNorthName].started += OnButtonNorthDown;
+        _playerInput.actions[_userInputDataAsset.ButtonNorthName].canceled += OnButtonNorthUp;
+
+        _playerInput.actions[_userInputDataAsset.ButtonSouthName].started += OnButtonSouthDown;
+        _playerInput.actions[_userInputDataAsset.ButtonSouthName].canceled += OnButtonSouthUp;
     }
 
-    /// <summary>
-    /// 移動入力されたときに呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnMove(InputAction.CallbackContext context)
-    {       
-        _moveInput = context.ReadValue<Vector2>();    
-    }
 
-    private void OnAttackDirection(InputAction.CallbackContext context)
+    private void OnLeftStick(InputAction.CallbackContext context)
     {
-        _attackDirectionInput = context.ReadValue<Vector2>();
+        _leftStickInput = context.ReadValue<Vector2>();
     }
 
-    /// <summary>
-    /// 通常攻撃の入力が押された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnNormalAttackDown(InputAction.CallbackContext context)
+    private void OnRightStick(InputAction.CallbackContext context)
     {
-        // 通常攻撃判定を取得
-        _isNormalAttack = true;
+        _rightStickInput = context.ReadValue<Vector2>();
     }
 
-    /// <summary>
-    /// 通常攻撃の入力が離された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnNormalAttackUp(InputAction.CallbackContext context)
+    public void OnLeftTriggerDown(InputAction.CallbackContext context)
     {
-        _isNormalAttack = false;
+        _isLeftTrigger = true;
     }
 
-    /// <summary>
-    /// ロール攻撃の入力が押された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnRoleAttackDown(InputAction.CallbackContext context)
-    {       
-        _isRoleAttack = true;
-    }
-
-    private void OnRoleAttackUp(InputAction.CallbackContext context)
+    public void OnLeftTriggerUp(InputAction.CallbackContext context)
     {
-        _isRoleAttack = false;
+        _isLeftTrigger = false;
     }
 
-    /// <summary>
-    /// 蘇生の入力が押された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnResurrectionDown(InputAction.CallbackContext context)
+    private void OnRightTriggerDown(InputAction.CallbackContext context)
     {
-        _isResurrection = true;
+        _isRightTrigger = true;
     }
 
-    /// <summary>
-    /// 蘇生の入力が離された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnResurrectionUp(InputAction.CallbackContext context)
+    private void OnRightTriggerUp(InputAction.CallbackContext context)
     {
-        _isResurrection = false;
+        _isRightTrigger = false;
     }
 
-    /// <summary>
-    /// 掴み/投げの入力が押された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnHoldTriggerDown(InputAction.CallbackContext context)
+    public void OnLeftButtonDown(InputAction.CallbackContext context)
     {
-        _isHoldTrigger = true;
+        _isLeftButton = true;
     }
 
-    /// <summary>
-    /// 掴み/投げの入力が離された時に呼ばれる処理
-    /// </summary>
-    /// <param name="context">入力情報</param>
-    private void OnHoldTriggerUp(InputAction.CallbackContext context)
+    public void OnLeftButtonUp(InputAction.CallbackContext context)
     {
-        _isHoldTrigger = false;
+        _isLeftButton = false;
     }
 
-    private void OnCancelDown(InputAction.CallbackContext context)
+    public void OnRightButtonDown(InputAction.CallbackContext context)
     {
-        _isCancel = true;
+        _isRightButton = true;
     }
 
-    private void OnCancelUp(InputAction.CallbackContext context)
+    public void OnRightButtonUp(InputAction.CallbackContext context)
     {
-        _isCancel = false;
+        _isRightButton = false;
+    }
+
+    private void OnButtonEastDown(InputAction.CallbackContext context)
+    {
+        _isButtonEast = true;
+    }
+
+    private void OnButtonEastUp(InputAction.CallbackContext context)
+    {
+        _isButtonEast = false;
+    }
+
+    private void OnButtonWestDown(InputAction.CallbackContext context)
+    {
+        _isButtonWest = true;
+    }
+
+    private void OnButtonWestUp(InputAction.CallbackContext context)
+    {
+        _isButtonWest = false;
+    }
+
+    private void OnButtonNorthDown(InputAction.CallbackContext context)
+    {
+        _isButtonNorth = true;
+    }
+
+    private void OnButtonNorthUp(InputAction.CallbackContext context)
+    {
+        _isButtonNorth = false;
+    }
+
+    private void OnButtonSouthDown(InputAction.CallbackContext context)
+    {
+        _isButtonSouth = true;
+    }
+
+    private void OnButtonSouthUp(InputAction.CallbackContext context)
+    {
+        _isButtonSouth = false;
     }
 }

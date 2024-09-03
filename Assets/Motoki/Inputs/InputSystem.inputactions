@@ -6,7 +6,7 @@
             "id": "aa294302-3a5a-4850-aec1-a46b5a4add47",
             "actions": [
                 {
-                    "name": "Move",
+                    "name": "LeftStick",
                     "type": "Value",
                     "id": "b39d5480-7d3a-4cc8-92fb-0558b9ee864e",
                     "expectedControlType": "Vector2",
@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "AttackDirection",
+                    "name": "RightStick",
                     "type": "Value",
                     "id": "675891b1-5bdc-43da-ae93-035966ac89e4",
                     "expectedControlType": "Vector2",
@@ -24,16 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "NormalAttack",
-                    "type": "Value",
-                    "id": "4f1e2a84-7085-484c-a068-2125e2c32753",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "RoleAttack",
+                    "name": "RightTrigger",
                     "type": "Value",
                     "id": "a8b38bf3-a51a-488f-be3b-d106f3f1ec9f",
                     "expectedControlType": "Button",
@@ -42,7 +33,43 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Resurrection",
+                    "name": "RightButton",
+                    "type": "Value",
+                    "id": "71b2b873-46dc-4567-ab75-5b3c2339df00",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftTrigger",
+                    "type": "Value",
+                    "id": "72973fa0-927c-4ba9-bf9c-90f99319e607",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "LeftButton",
+                    "type": "Value",
+                    "id": "f09023a6-85bf-4fec-aee7-2bc8f3db3bc6",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ButtonEast",
+                    "type": "Value",
+                    "id": "4f1e2a84-7085-484c-a068-2125e2c32753",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "ButtonWest",
                     "type": "Value",
                     "id": "65e5197e-4b6c-43fb-aac8-dc92340873d0",
                     "expectedControlType": "Button",
@@ -51,7 +78,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "HoldTrigger",
+                    "name": "ButtonNorth",
                     "type": "Value",
                     "id": "0338755e-d622-40c6-97b0-92bbb658e165",
                     "expectedControlType": "Button",
@@ -60,7 +87,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Cancel",
+                    "name": "ButtonSouth",
                     "type": "Value",
                     "id": "8e177331-2dd7-449f-9dbe-0830c3a799fc",
                     "expectedControlType": "Button",
@@ -77,7 +104,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -88,7 +115,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -99,7 +126,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -110,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -121,7 +148,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -132,51 +159,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Move",
+                    "action": "LeftStick",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "08c79f7d-013f-4d8c-bed4-dd713663f18b",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "NormalAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "baecb11e-36b0-477a-9660-8d4095996dd6",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "NormalAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "aac630de-9eb1-4986-9020-a932f2572edf",
                     "path": "<Gamepad>/rightTrigger",
                     "interactions": "",
-                    "processors": "AxisDeadzone(min=1.401298E-45,max=0.5)",
-                    "groups": "Gamepad",
-                    "action": "RoleAttack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2e301c3d-5408-46a8-9d48-8f172e7783ed",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "RoleAttack",
+                    "groups": "Gamepad",
+                    "action": "RightTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -187,7 +181,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Resurrection",
+                    "action": "ButtonWest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -198,29 +192,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Resurrection",
+                    "action": "ButtonWest",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "8a68b210-acb6-43d7-9362-00c0cac870f4",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "HoldTrigger",
+                    "action": "ButtonNorth",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "8fd5be9d-636a-4b17-a783-1cab2d309b1d",
-                    "path": "<Keyboard>/rightArrow",
+                    "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "HoldTrigger",
+                    "action": "ButtonNorth",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -231,7 +225,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Cancel",
+                    "action": "ButtonSouth",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77efadb3-2dbc-4bac-a5da-782ea4be1b18",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ButtonSouth",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -242,7 +247,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "AttackDirection",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -253,7 +258,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AttackDirection",
+                    "action": "RightStick",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -264,7 +269,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AttackDirection",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -275,7 +280,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AttackDirection",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -286,7 +291,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AttackDirection",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -297,9 +302,64 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AttackDirection",
+                    "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "08c79f7d-013f-4d8c-bed4-dd713663f18b",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "ButtonEast",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "baecb11e-36b0-477a-9660-8d4095996dd6",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ButtonEast",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c6eaac30-cfa5-4442-a1ab-761b6b04fa7c",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "46ac3c77-154d-487c-abc1-9d0c9c829afa",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LeftButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "72e72d80-748d-4d5e-90fd-9c1fb08e5fbb",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

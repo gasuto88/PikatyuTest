@@ -52,8 +52,6 @@ public class Zero : Attack
     {
         base.UpdateCharacter();
 
-        Debug.Log(_isRoleCancel);
-
         if (_isNormalAttack)
         {
             _normalAttackCoolTime -= Time.deltaTime;
@@ -237,14 +235,14 @@ public class Zero : Attack
                         _moveDirection = _targetTransfrom.position - _myTransform.position;
                     }
 
-                    if (_userInput.IsCancel)
+                    if (_userInput.IsButtonSouth)
                     {
                         _isRoleCancel = true;
                         _roleButtonState = RoleButtonState.IDLE;
                         _roleLongPressTime = _roleData.LongPressTime;
                         return;
                     }
-                    else if (!_userInput.IsRoleAttack)
+                    else if (!_userInput.IsLeftTrigger)
                     {
                         _roleButtonState = RoleButtonState.IDLE;
                         _actionState = ActionState.ROLE_ATTACK;
@@ -265,19 +263,19 @@ public class Zero : Attack
             // 長押し
             case RoleButtonState.LONG:
                 {
-                    Vector3 attackDirectionInput = _userInput.AttackDirectionInput;
+                    Vector3 attackDirectionInput = _userInput.RightStickInput;
 
                     // ロール攻撃方向
                     _roleAttackDirection
                         = Vector3.forward * attackDirectionInput.y + Vector3.right * attackDirectionInput.x;
 
-                    if (_userInput.IsCancel)
+                    if (_userInput.IsButtonSouth)
                     {
                         _isRoleCancel = true;
                         _roleButtonState = RoleButtonState.IDLE;
                         _roleLongPressTime = _roleData.LongPressTime;
                     }
-                    else if (!_userInput.IsRoleAttack)
+                    else if (!_userInput.IsLeftTrigger)
                     {
                         _roleButtonState = RoleButtonState.IDLE;
                         _actionState = ActionState.ROLE_ATTACK;
