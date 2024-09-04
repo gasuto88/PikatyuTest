@@ -67,7 +67,8 @@ public class CollisionManager : MonoBehaviour
             {
                 Debug.Log("どうかしましたか");
                 // つかめるものだったらListに追加
-                if (iholdable.CanHold())
+                if (iholdable.CanHold()
+                    && targetCollider.transform != myTransform)
                 {
                     Debug.Log("ゲームのカード落としちゃった");
                     holdTransforms.Add(targetCollider.transform);

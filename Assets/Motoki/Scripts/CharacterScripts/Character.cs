@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// キャラクタークラス
@@ -65,6 +66,8 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
     protected Transform _myTransform = default;
 
     protected Transform _targetTransfrom = default;
+
+    protected Transform _holdTarget = default;
 
     // 行動状態
     protected ActionState _actionState = default;
@@ -208,10 +211,11 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
         if (_moveDirection != Vector3.zero)
         {
             // 回転を計算
-            _playerQuaternion = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerData.RotationSpeed);
+            //_myTransform.rotation = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerData.RotationSpeed);
+            CharacterRotate(_moveDirection);
         }
         // 回転角度を設定
-        _myTransform.rotation = _playerQuaternion;
+        //_myTransform.rotation = _playerQuaternion;
     }
 
     /// <summary>
@@ -293,6 +297,13 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
         _rigidbody.velocity = _moveCalculator.CalculationMove(_moveDirection, _playerData.MoveSpeed);
     }
 
+    protected void CharacterRotate(Vector3 rotateDirection)
+    {
+        Debug.Log("お回転");
+        Quaternion playerRotate = _moveCalculator.CalculationRotate(_myTransform.rotation, rotateDirection, _playerData.RotationSpeed);
+        _rigidbody.MoveRotation(playerRotate);        
+    }
+
     /// <summary>
     /// 通常攻撃処理
     /// </summary>
@@ -320,29 +331,31 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                 {
                     if (isHoldInput
                         && (_actionState == ActionState.IDLE || _actionState == ActionState.MOVE))
-                    {
-                        // 当たり判定の大きさ
-                                                
+                    {                                                            
                         // つかめるものがないかチェック
-                        Transform holdTarget = _collisionManager.SerachHoldObject(
+                        _holdTarget = _collisionManager.SerachHoldObject(
                             _myTransform.position,_holdsize , _myTransform.rotation, _playerData.HoldObjects, _myTransform);
-                        Debug.Log(holdTarget);
+                        Debug.Log(_holdTarget);
                         
-                        if (holdTarget == null)
+                        if (_holdTarget == null)
                         {
                             return;
                         }
                         
-                        switch (holdTarget.tag)
+                        switch (_holdTarget.tag)
                         {
                             // プレイヤー
                             case LAYER_PLAYER:
                                 {
-                                    // 親子
                                     
                                     
 
-                                    if(holdTarget.TryGetComponent<IHoldChange>(out IHoldChange iholdChange))
+                                    // 親子
+                                    _holdTarget.parent = _myTransform;
+
+                                    _holdTarget.position = _myTransform.position + _myTransform.forward * 2;
+
+                                    if(_holdTarget.TryGetComponent<IHoldChange>(out IHoldChange iholdChange))
                                     {
                                         iholdChange.ChangeHoldState();
                                     }
@@ -366,6 +379,7 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
 
                         }
 
+                        _holdState = HoldState.HOLD;
 
                     }
 
@@ -373,10 +387,6 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                 }
             case HoldState.HOLD:
                 {
-                    if (isHoldInput)
-                    {
-
-                    }
                     break;
                 }
             case HoldState.TRIGGER:
@@ -390,11 +400,11 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_myTransform.position , _holdsize);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireCube(_myTransform.position , _holdsize);
+    //}
 
     protected virtual void ChangeRoleAttackDirection()
     {

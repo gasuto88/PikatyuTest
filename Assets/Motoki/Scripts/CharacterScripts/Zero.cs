@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Zero : Attack
 {
@@ -113,7 +114,7 @@ public class Zero : Attack
                     _moveDirection = _targetTransfrom.position - _myTransform.position;
 
                     // 弾を取り出す
-                    Ball ball = _electronicShocksPool.TakeOut(_myTransform.position, _playerQuaternion);
+                    Ball ball = _electronicShocksPool.TakeOut(_myTransform.position, _myTransform.rotation);
 
                     // 弾にパラメータを設定
                     ball.SetParameter(this, _targetTransfrom, _normalAttackData.BallDamage, _normalAttackData.BallSpeed);
@@ -159,7 +160,7 @@ public class Zero : Attack
 
         if (_moveDirection != Vector3.zero)
         {
-            _playerQuaternion = Quaternion.LookRotation(_moveDirection, Vector3.up);
+            CharacterRotate(_moveDirection);
         }
         switch (_roleState)
         {
@@ -169,7 +170,7 @@ public class Zero : Attack
                     _isRoleAttack = true;
 
                     // 弾を取り出す
-                    Ball ball = _electricBallPool.TakeOut(_myTransform.position, _playerQuaternion);
+                    Ball ball = _electricBallPool.TakeOut(_myTransform.position, _myTransform.rotation);
 
                     // 弾にパラメータを設定
                     ball.SetParameter(this, _targetTransfrom, _roleData.BallDamage, _roleData.BallSpeed);
