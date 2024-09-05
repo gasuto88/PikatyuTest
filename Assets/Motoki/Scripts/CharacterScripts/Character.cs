@@ -12,6 +12,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.EventSystems;
+using Unity.VisualScripting;
 
 /// <summary>
 /// キャラクタークラス
@@ -60,7 +61,7 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
 
     protected CollisionManager _collisionManager = default;
 
-    protected Rigidbody _rigidbody = default;
+    protected Rigidbody _myRigidbody = default;
 
     // 自身のTransform
     protected Transform _myTransform = default;
@@ -128,7 +129,7 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
 
         _moveCalculator = new();
 
-        _rigidbody = GetComponent<Rigidbody>();
+        _myRigidbody = GetComponent<Rigidbody>();
 
         Init();
     }
@@ -294,14 +295,14 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
         _moveDirection = Vector3.forward * moveInput.y + Vector3.right * moveInput.x;
 
         // 移動量を加算
-        _rigidbody.velocity = _moveCalculator.CalculationMove(_moveDirection, _playerData.MoveSpeed);
+        _myRigidbody.velocity = _moveCalculator.CalculationMove(_moveDirection, _playerData.MoveSpeed);
     }
 
     protected void CharacterRotate(Vector3 rotateDirection)
     {
         Debug.Log("お回転");
         Quaternion playerRotate = _moveCalculator.CalculationRotate(_myTransform.rotation, rotateDirection, _playerData.RotationSpeed);
-        _rigidbody.MoveRotation(playerRotate);        
+        _myRigidbody.MoveRotation(playerRotate);        
     }
 
     /// <summary>
@@ -335,6 +336,7 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                         // つかめるものがないかチェック
                         _holdTarget = _collisionManager.SerachHoldObject(
                             _myTransform.position,_holdsize , _myTransform.rotation, _playerData.HoldObjects, _myTransform);
+
                         Debug.Log(_holdTarget);
                         
                         if (_holdTarget == null)
@@ -347,8 +349,9 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                             // プレイヤー
                             case LAYER_PLAYER:
                                 {
-                                    
-                                    
+                                    Rigidbody targetRigidbody = _holdTarget.GetComponent<Rigidbody>();
+
+                                    Destroy(targetRigidbody);
 
                                     // 親子
                                     _holdTarget.parent = _myTransform;
@@ -387,10 +390,21 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                 }
             case HoldState.HOLD:
                 {
+                    if (_userInput.IsButtonSouth)
+                    {
+                        _holdState = HoldState.TRIGGER;
+                    }
+
                     break;
                 }
             case HoldState.TRIGGER:
                 {
+                    _holdTarget.AddComponent<Rigidbody>();
+
+                    Rigidbody targetRigidbody = _holdTarget.GetComponent<Rigidbody>();
+
+                    
+                    targetRigidbody.constraints = RigidbodyConstraints.FreezeAll;
                     break;
                 }
             default:

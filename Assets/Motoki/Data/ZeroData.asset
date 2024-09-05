@@ -16,7 +16,7 @@ MonoBehaviour:
   _playerHp: 10
   _defense: 5
   _moveSpeed: 10
-  _rotationSpeed: 0
+  _rotationSpeed: 100
   _shotSpeed: 1
   _holdDistance: 5
   _holdObjects:
