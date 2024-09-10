@@ -16,9 +16,17 @@ MonoBehaviour:
   _playerHp: 10
   _defense: 5
   _moveSpeed: 10
-  _rotationSpeed: 100
-  _shotSpeed: 1
-  _holdDistance: 5
+  _rotationSpeed: 300
+  _rotationTime: 0.2
+  _shotSpeed: 30
+  _holdDistance: 3
+  _holdCoolTime: 1
+  _burstRadius: 5
+  _burstDamage: 30
   _holdObjects:
   - Player
   - Enemy
+  _collisionObjects:
+  - Player
+  - Enemy
+  - Wall

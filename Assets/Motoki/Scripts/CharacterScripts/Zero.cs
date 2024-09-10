@@ -23,7 +23,7 @@ public class Zero : Attack
 
     private ElectricBallPool _electricBallPool = default;
 
-    private ElectronicShocksPool _electronicShocksPool = default;
+    private NormalElectricPool _electronicShocksPool = default;
 
     #endregion
 
@@ -32,7 +32,7 @@ public class Zero : Attack
         // script取得
         GameObject ballPoolManager = GameObject.FindGameObjectWithTag("BallPool");
         _electricBallPool = ballPoolManager.GetComponent<ElectricBallPool>();
-        _electronicShocksPool = ballPoolManager.GetComponent<ElectronicShocksPool>();
+        _electronicShocksPool = ballPoolManager.GetComponent<NormalElectricPool>();
 
         // 通常攻撃時間を設定
         _normalAttackTime = _normalAttackData.NormalAttackTime;
@@ -97,29 +97,40 @@ public class Zero : Attack
             // 初期化
             case AttackProcess.INIT:
                 {
-                    _isNormalAttack = true;
-
-                    // 敵を取得
-                    _targetTransfrom
-                        = _iSearch.TargetSearch(_myTransform.position, _normalAttackData.NormalAttackDistance, LAYER_ENEMY);
-
-                    // 敵が範囲に入ってたら
-                    if (_targetTransfrom == null)
+                    if (!_isNormalAttack)
                     {
-                        _actionState = ActionState.IDLE;
-                        return;
+                        _isNormalAttack = true;
+
+                        // 敵を取得
+                        _targetTransfrom
+                            = _iSearch.TargetSearch(_myTransform.position, _normalAttackData.NormalAttackDistance, LAYER_ENEMY);
+
+                        // 敵が範囲に入ってたら
+                        if (_targetTransfrom == null)
+                        {
+                            _actionState = ActionState.IDLE;
+                            return;
+                        }
+
+                        // 敵の方向を取得
+                        _moveDirection = _targetTransfrom.position - _myTransform.position;
                     }
 
-                    // 敵の方向を取得
-                    _moveDirection = _targetTransfrom.position - _myTransform.position;
+                    CharacterRotate(_moveDirection);
 
-                    // 弾を取り出す
-                    Ball ball = _electronicShocksPool.TakeOut(_myTransform.position, _myTransform.rotation);
+                    _rotationTime -= Time.deltaTime;
 
-                    // 弾にパラメータを設定
-                    ball.SetParameter(this, _targetTransfrom, _normalAttackData.BallDamage, _normalAttackData.BallSpeed);
+                    if (_rotationTime <= 0f)
+                    {
+                        _rotationTime = _playerData.RotationTime;
+                        // 弾を取り出す
+                        Ball ball = _electronicShocksPool.TakeOut(_myTransform.position, _myTransform.rotation);
 
-                    _normalAttackState = AttackProcess.EXECUTE;
+                        // 弾にパラメータを設定
+                        ball.SetParameter(this, _targetTransfrom, _normalAttackData.BallDamage, _normalAttackData.BallSpeed);
+
+                        _normalAttackState = AttackProcess.EXECUTE;
+                    }
 
                     break;
                 }
@@ -154,30 +165,34 @@ public class Zero : Attack
     }
 
     protected override void RoleAttack()
-    {
-        //Debug.Log("ロール攻撃");
-        _moveDirection = _roleAttackDirection;
-
+    {        
         if (_moveDirection != Vector3.zero)
         {
-            CharacterRotate(_moveDirection);
+            CharacterRotate(_roleAttackDirection);
         }
         switch (_roleState)
         {
             // 初期化
             case AttackProcess.INIT:
                 {
-                    _isRoleAttack = true;
+                    _rotationTime -= Time.deltaTime;
 
-                    // 弾を取り出す
-                    Ball ball = _electricBallPool.TakeOut(_myTransform.position, _myTransform.rotation);
+                    if (_rotationTime <= 0f)
+                    {
+                        _rotationTime = _playerData.RotationTime;
 
-                    // 弾にパラメータを設定
-                    ball.SetParameter(this, _targetTransfrom, _roleData.BallDamage, _roleData.BallSpeed);
+                        _isRoleAttack = true;
 
-                    ball.SetBurstInfo(_roleData.BurstDamage, _roleData.BurstRadius);
+                        // 弾を取り出す
+                        Ball ball = _electricBallPool.TakeOut(_myTransform.position, _myTransform.rotation);
 
-                    _roleState = AttackProcess.EXECUTE;
+                        // 弾にパラメータを設定
+                        ball.SetParameter(this, _targetTransfrom, _roleData.BallDamage, _roleData.BallSpeed);
+
+                        ball.SetBurstInfo(_roleData.BallDamage, _roleData.BallDamageRadius);
+
+                        _roleState = AttackProcess.EXECUTE;
+                    }
 
                     break;
                 }
@@ -233,7 +248,7 @@ public class Zero : Attack
                     else
                     {
                         // 敵の方向を取得
-                        _moveDirection = _targetTransfrom.position - _myTransform.position;
+                        _roleAttackDirection = _targetTransfrom.position - _myTransform.position;
                     }
 
                     if (_userInput.IsButtonSouth)

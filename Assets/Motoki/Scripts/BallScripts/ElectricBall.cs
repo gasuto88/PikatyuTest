@@ -1,7 +1,7 @@
 /*-------------------------------------------------
 * ElectricBall.cs
 * 
-* 作成日　2024/08/
+* 作成日　2024/08/25
 *
 * 作成者　本木大地
 -------------------------------------------------*/
@@ -24,7 +24,7 @@ public class ElectricBall : Ball
 
 		// 衝突した敵を取得
 		Transform targetCharacter = _collisionManager.CollisionTarget(
-			_myTransform.position, _myTransform.localScale, _myTransform.rotation, _layerNames);
+			_myTransform.position, _myTransform.localScale, _myTransform.rotation, _layerNames,_myTransform);
 
 		// 衝突したら弾をしまう
 		if (targetCharacter == null)

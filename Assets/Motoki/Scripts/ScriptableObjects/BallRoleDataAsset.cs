@@ -22,6 +22,9 @@ public class BallRoleDataAsset : RoleDataAsset
     [SerializeField, Header("弾のダメージ"), Min(0f)]
     private float _ballDamage = 0f;
 
+    [SerializeField,Header("ダメージ範囲")]
+    private float _ballDamageRadius = 5f;
+
     [SerializeField, Header("長押し時間"), Min(0f)]
     private float _longPressTime = 0f;
 
@@ -35,6 +38,8 @@ public class BallRoleDataAsset : RoleDataAsset
     public float BallSpeed { get => _ballSpeed; set => _ballSpeed = value; }
 
     public float BallDamage { get => _ballDamage; set => _ballDamage = value; }
+
+    public float BallDamageRadius { get => _ballDamageRadius; set => _ballDamageRadius = value; }
 
     public float LongPressTime { get => _longPressTime; set => _longPressTime = value; }
 

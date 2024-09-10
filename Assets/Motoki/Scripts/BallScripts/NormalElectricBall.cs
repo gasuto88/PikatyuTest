@@ -1,5 +1,5 @@
 /*-------------------------------------------------
-* ElectronicShocksBall.cs
+* NormalElectricBall.cs
 * 
 * 作成日　2024/08/
 *
@@ -10,11 +10,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElectronicShocksBall : Ball 
+public class NormalElectricBall : Ball 
 {
     protected override void Init()
     {
-        _ballPool = GameObject.FindGameObjectWithTag("BallPool").GetComponent<ElectronicShocksPool>();
+        _ballPool = GameObject.FindGameObjectWithTag("BallPool").GetComponent<NormalElectricPool>();
     }
 
     protected override void UpdateBall()
@@ -23,7 +23,7 @@ public class ElectronicShocksBall : Ball
 
         // 衝突した敵を取得
         Transform targetCharacter = _collisionManager.CollisionTarget(
-			_myTransform.position, _myTransform.localScale, _myTransform.rotation, _layerNames);
+			_myTransform.position, _myTransform.localScale, _myTransform.rotation, _layerNames,_myTransform);
 
 		// 衝突したら弾をしまう
 		if (targetCharacter == null)

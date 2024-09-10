@@ -18,7 +18,7 @@ using Unity.VisualScripting;
 /// キャラクタークラス
 /// </summary>
 [System.Serializable]
-public class Character : MonoBehaviour, IHoldable,IHoldChange
+public class Character : MonoBehaviour, IHoldable, IHoldChange, IShotChange, ISetRigidbody
 {
     // レイヤーの名前
     protected const string LAYER_PLAYER = "Player";
@@ -30,7 +30,7 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
     [SerializeField, Header("プレイヤーデータ")]
     protected PlayerDataAsset _playerData = default;
 
-    [SerializeField,Header("ホールドの当たり判定")]
+    // ホールドの当たり判定
     protected Vector3 _holdsize = default;
 
     // 通常攻撃時間
@@ -45,10 +45,15 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
     // ロールクールタイム
     protected float _roleCoolTime = 0f;
 
+    // 回転時間
+    protected float _rotationTime = 0f;
+
     // 移動方向
     protected Vector3 _moveDirection = default;
 
     protected Vector3 _roleAttackDirection = default;
+
+    protected Vector3 _attackDirection = default;
 
     // プレイヤーのQuaternion
     protected Quaternion _playerQuaternion = default;
@@ -102,6 +107,10 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
     // ロールキャンセルクールタイム
     protected float _roleCancelCoolTime = 0f;
 
+    protected float _holdCoolTime = 0f;
+
+    protected bool _isHold = false;
+
     #endregion
 
     #region プロパティ
@@ -131,6 +140,13 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
 
         _myRigidbody = GetComponent<Rigidbody>();
 
+        _holdCoolTime = _playerData.HoldCoolTime;
+
+        _rotationTime = _playerData.RotationTime;
+
+        // ホールドの半分の当たり判定を設定
+        _holdsize = new Vector3(_myTransform.localScale.x, _myTransform.localScale.y, _playerData.HoldDistance) / 2;
+
         Init();
     }
 
@@ -153,12 +169,14 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
         // 移動の入力を取得
         Vector2 moveInput = _userInput.LeftStickInput;
 
+        Vector2 attackDirectionInput = _userInput.RightStickInput;
+
         // ホールド入力を取得
-        bool isHoldInput = _userInput.IsButtonNorth;
+        bool isHoldInput = _userInput.IsRightTrigger;
 
         ActionStateMachine(moveInput);
 
-        Hold(isHoldInput);
+        Hold(isHoldInput, attackDirectionInput);
 
         switch (_actionState)
         {
@@ -171,6 +189,13 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
             case ActionState.MOVE:
                 {
                     Move(moveInput);
+
+                    if (_moveDirection != Vector3.zero
+                        && _holdState != HoldState.TRIGGER)
+                    {
+                        // 回転を計算
+                        CharacterRotate(_moveDirection);
+                    }
 
                     break;
                 }
@@ -196,6 +221,49 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
             // ふっ飛ばされ状態
             case ActionState.SHOT:
                 {
+                    Shot();
+
+                    Transform collisionTarget
+                        = _collisionManager.CollisionTarget(_myTransform.position, _myTransform.localScale
+                        , _myTransform.rotation, _playerData.ColisionObjects, _myTransform);
+
+                    if (collisionTarget != null)
+                    {
+                        switch (collisionTarget.tag)
+                        {
+                            case LAYER_PLAYER:
+                                {                                  
+                                    Collider[] targetColliders 
+                                        = _collisionManager.TargetInBurst(_myTransform.position, _playerData.BurstRadius,LAYER_ENEMY);
+
+                                    //// バースト範囲内にいる全ての敵にダメージを与える
+                                    //foreach (Collider targetCollider in targetColliders)
+                                    //{
+                                    //    if(targetCollider.TryGetComponent<IDamageable>(out IDamageable damageable))
+                                    //    {
+                                    //        damageable.Damage(_playerData.BurstDamage);
+                                    //    }
+                                    //}
+
+                                    break;
+                                }
+                            case LAYER_ENEMY:
+                                {
+                                    //    if(targetCollider.TryGetComponent<IDamageable>(out IDamageable damageable))
+                                    //    {
+                                    //        damageable.Damage(_playerData.BurstDamage);
+                                    //    }
+                                    break;
+                                }
+                            default:
+                                {
+                                    
+                                    break;
+                                }
+                        }
+                        _actionState = ActionState.IDLE;
+                    }
+
                     break;
                 }
             // 蘇生
@@ -208,15 +276,6 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                     break;
                 }
         }
-
-        if (_moveDirection != Vector3.zero)
-        {
-            // 回転を計算
-            //_myTransform.rotation = _moveCalculator.CalculationRotate(_myTransform.rotation, _moveDirection, _playerData.RotationSpeed);
-            CharacterRotate(_moveDirection);
-        }
-        // 回転角度を設定
-        //_myTransform.rotation = _playerQuaternion;
     }
 
     /// <summary>
@@ -300,9 +359,9 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
 
     protected void CharacterRotate(Vector3 rotateDirection)
     {
-        Debug.Log("お回転");
         Quaternion playerRotate = _moveCalculator.CalculationRotate(_myTransform.rotation, rotateDirection, _playerData.RotationSpeed);
-        _myRigidbody.MoveRotation(playerRotate);        
+        //Quaternion playerRotate = Quaternion.LookRotation(rotateDirection, Vector3.up);
+        _myRigidbody.MoveRotation(playerRotate);
     }
 
     /// <summary>
@@ -324,7 +383,7 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
     /// ホールド処理
     /// </summary>
     /// <param name="isHoldInput"></param>
-    private void Hold(bool isHoldInput)
+    private void Hold(bool isHoldInput, Vector2 attackDirectionInput)
     {
         switch (_holdState)
         {
@@ -332,18 +391,30 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                 {
                     if (isHoldInput
                         && (_actionState == ActionState.IDLE || _actionState == ActionState.MOVE))
-                    {                                                            
+                    {
+                        Vector3 holdDirection = Vector3.forward * attackDirectionInput.y + Vector3.right * attackDirectionInput.x;
+
+                        Vector3 holdPosition = _myTransform.position + holdDirection * (_holdsize.z / 2);
+
+                        Quaternion holdRotation;
+
+                        if (holdDirection == Vector3.zero)
+                        {
+                            holdRotation = _myTransform.rotation;
+                        }
+                        else
+                        {
+                            holdRotation = Quaternion.LookRotation(holdDirection, Vector3.up);
+                        }
                         // つかめるものがないかチェック
                         _holdTarget = _collisionManager.SerachHoldObject(
-                            _myTransform.position,_holdsize , _myTransform.rotation, _playerData.HoldObjects, _myTransform);
+                            holdPosition, _holdsize, holdRotation, _playerData.HoldObjects, _myTransform);
 
-                        Debug.Log(_holdTarget);
-                        
                         if (_holdTarget == null)
                         {
                             return;
                         }
-                        
+
                         switch (_holdTarget.tag)
                         {
                             // プレイヤー
@@ -358,7 +429,9 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
 
                                     _holdTarget.position = _myTransform.position + _myTransform.forward * 2;
 
-                                    if(_holdTarget.TryGetComponent<IHoldChange>(out IHoldChange iholdChange))
+                                    _holdTarget.transform.rotation = _myTransform.rotation;
+
+                                    if (_holdTarget.TryGetComponent<IHoldChange>(out IHoldChange iholdChange))
                                     {
                                         iholdChange.ChangeHoldState();
                                     }
@@ -390,8 +463,22 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                 }
             case HoldState.HOLD:
                 {
-                    if (_userInput.IsButtonSouth)
+                    // 攻撃方向を取得
+                    _attackDirection = Vector3.forward * attackDirectionInput.y + Vector3.right * attackDirectionInput.x;
+
+                    // 入力がなかったらプレイヤーの向いてる方向をむく
+                    if (_attackDirection == Vector3.zero)
                     {
+                        _attackDirection = _myTransform.forward;
+                    }
+
+                    _holdCoolTime -= Time.deltaTime;
+
+                    if (isHoldInput
+                        && _holdCoolTime <= 0f)
+                    {
+                        _holdCoolTime = _playerData.HoldCoolTime;
+
                         _holdState = HoldState.TRIGGER;
                     }
 
@@ -399,12 +486,29 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
                 }
             case HoldState.TRIGGER:
                 {
-                    _holdTarget.AddComponent<Rigidbody>();
+                    CharacterRotate(_attackDirection);
 
-                    Rigidbody targetRigidbody = _holdTarget.GetComponent<Rigidbody>();
+                    _rotationTime -= Time.deltaTime;
 
-                    
-                    targetRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+                    // プレイヤーの回転が終わったら投げる
+                    if (_rotationTime <= 0f)
+                    {
+                        _rotationTime = _playerData.RotationTime;
+
+                        _holdTarget.parent = null;
+
+                        if (_holdTarget.TryGetComponent<ISetRigidbody>(out ISetRigidbody setRigidbody))
+                        {
+                            setRigidbody.SetRigidbody();
+                        }
+
+                        if (_holdTarget.TryGetComponent<IShotChange>(out IShotChange shotChange))
+                        {
+                            shotChange.ChangeShotState();
+                        }
+
+                        _holdState = HoldState.IDLE;
+                    }
                     break;
                 }
             default:
@@ -414,11 +518,10 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireCube(_myTransform.position , _holdsize);
-    //}
+    protected void Shot()
+    {
+        _myRigidbody.velocity = _myTransform.forward * _playerData.ShotSpeed;
+    }
 
     protected virtual void ChangeRoleAttackDirection()
     {
@@ -433,6 +536,20 @@ public class Character : MonoBehaviour, IHoldable,IHoldChange
     public void ChangeHoldState()
     {
         _actionState = ActionState.HELD;
+    }
+
+    public void ChangeShotState()
+    {
+        _actionState = ActionState.SHOT;
+    }
+
+    public void SetRigidbody()
+    {
+        gameObject.AddComponent<Rigidbody>();
+
+        _myRigidbody = GetComponent<Rigidbody>();
+
+        _myRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
 }

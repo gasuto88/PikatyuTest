@@ -13,6 +13,6 @@ using UnityEngine;
 /// <summary>
 /// 電気ショックプールクラス
 /// </summary>
-public class ElectronicShocksPool : BallPool 
+public class NormalElectricPool : BallPool 
 {
 }

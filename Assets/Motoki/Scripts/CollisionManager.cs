@@ -11,34 +11,41 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class CollisionManager : MonoBehaviour
 {
 
-    public Transform CollisionTarget(Vector3 center, Vector3 halfSize, Quaternion myQuaternion, string[] layerNames)
+    public Transform CollisionTarget(Vector3 center, Vector3 halfSize, Quaternion myQuaternion, string[] layerNames, Transform myTransform)
     {
-        Collider[] targetColliders;
+        // 判定にいる全部のオブジェクトを取得
+        Collider[] targetColliders = Physics.OverlapBox(center, halfSize, myQuaternion, LayerMask.GetMask(layerNames));
 
-        targetColliders = Physics.OverlapBox(center, halfSize, myQuaternion, LayerMask.GetMask(layerNames));
-
-        if (1 == targetColliders.Length)
+        // オブジェクトがなかったら
+        if (targetColliders.Length <= 0)
         {
-            return targetColliders[0].transform;
-        }
-        else if (2 <= targetColliders.Length)
-        {
-            // 一番近いColliderを取得
-            Collider nearestCollider
-                = targetColliders.OrderBy(obj => Vector3.Distance(obj.transform.position, center)).FirstOrDefault();
-
-            return nearestCollider.transform;
+            return null;
         }
 
-        return null;
+        List<Transform> targetTransforms = new List<Transform>();
+
+        // ぶつかる対象をまとめる
+        foreach (Collider targetCollider in targetColliders)
+        {
+            // ぶつかる対象だったらListに追加
+            if (targetCollider.transform != myTransform)
+            {
+                targetTransforms.Add(targetCollider.transform);
+            }
+        }
+        // 自分に一番近い対象を取得
+        Transform targetTransform = targetTransforms.OrderBy(obj => Vector3.Distance(obj.transform.position, center)).FirstOrDefault();
+
+        return targetTransform;
     }
 
     /// <summary>
-    /// 一番近いかつつかめるものを返す
+    /// 一番近い かつ つかめるものを返す
     /// </summary>
     /// <param name="center">中心座標</param>
     /// <param name="halfSize">当たり判定の大きさ</param>
@@ -46,11 +53,11 @@ public class CollisionManager : MonoBehaviour
     /// <param name="layerNames">レイヤーの名前</param>
     /// /// <param name="myTransform">自分のTransform</param>
     /// <returns>つかめるもの</returns>
-    public Transform SerachHoldObject(Vector3 center, Vector3 halfSize, Quaternion myQuaternion, string[] layerNames,Transform myTransform)
+    public Transform SerachHoldObject(Vector3 center, Vector3 halfSize, Quaternion myQuaternion, string[] layerNames, Transform myTransform)
     {
         // ホールド判定にいる全部のオブジェクトを取得
         Collider[] targetColliders = Physics.OverlapBox(center, halfSize, myQuaternion, LayerMask.GetMask(layerNames));
-        
+
         // オブジェクトがなかったら
         if (targetColliders.Length <= 0)
         {
@@ -65,12 +72,10 @@ public class CollisionManager : MonoBehaviour
             Debug.Log(targetCollider.name);
             if (targetCollider.TryGetComponent<IHoldable>(out IHoldable iholdable))
             {
-                Debug.Log("どうかしましたか");
                 // つかめるものだったらListに追加
                 if (iholdable.CanHold()
                     && targetCollider.transform != myTransform)
                 {
-                    Debug.Log("ゲームのカード落としちゃった");
                     holdTransforms.Add(targetCollider.transform);
                 }
             }
